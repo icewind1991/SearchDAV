@@ -72,6 +72,9 @@ class SearchPlugin extends ServerPlugin {
 	}
 
 	private function getPathFromUri($uri) {
+		if (strpos($uri, '://') === false) {
+			return $uri;
+		}
 		try {
 			return ($uri === '' && $this->server->getBaseUri() === '/') ? '' : $this->server->calculateUri($uri);
 		} catch (Forbidden $e) {
