@@ -24,11 +24,14 @@ namespace SearchDAV\XML;
 use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
 
+/**
+ * The object representation of a search query made by the client
+ */
 class BasicSearch implements XmlDeserializable {
 	/**
 	 * @var string[]
 	 *
-	 * The list of properties to be selected in clark notation
+	 * The list of properties to be selected, specified in clark notation
 	 */
 	public $select;
 	/**
@@ -38,11 +41,20 @@ class BasicSearch implements XmlDeserializable {
 	 */
 	public $from;
 	/**
-	 * @var Operator[]
+	 * @var Operator
+	 *
+	 * The search operator, either a comparison ('gt', 'eq', ...) or a boolean operator ('and', 'or', 'not')
 	 */
 	public $where;
 	/**
 	 * @var Order[]
+	 *
+	 * The list of order operations that should be used to order the results.
+	 *
+	 * Each order operations consists of a property to sort on and a sort direction.
+	 * If more then one order operations are specified, the comparisons for ordering should
+	 * be applied in the order that the order operations are defined in with the earlier comparisons being
+	 * more significant.
 	 */
 	public $orderBy;
 

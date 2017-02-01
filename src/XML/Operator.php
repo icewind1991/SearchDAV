@@ -53,6 +53,8 @@ class Operator implements XmlDeserializable {
 	 *  - string: property name for comparison
 	 *  - Literal: literal value for comparison
 	 *  - Operation: nested operation for and/or/not operations
+	 *
+	 * Which type and what number of argument an Operator takes depends on the operator type.
 	 */
 	public $arguments;
 

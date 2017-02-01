@@ -29,7 +29,17 @@ class Order implements XmlDeserializable {
 	const ASC = 'ascending';
 	const DESC = 'descending';
 
-	public $properties;
+	/**
+	 * @var string
+	 *
+	 * The property that should be sorted on.
+	 */
+	public $property;
+	/**
+	 * @var string 'ascending' or 'descending'
+	 *
+	 * The sort direction
+	 */
 	public $order;
 
 	static function xmlDeserialize(Reader $reader) {
@@ -38,7 +48,7 @@ class Order implements XmlDeserializable {
 		$childs = \Sabre\Xml\Deserializer\keyValue($reader);
 
 		$order->order = isset($childs['{DAV:}descending']) ? self::DESC : self::ASC;
-		$order->properties = $childs['{DAV:}prop'];
+		$order->property = $childs['{DAV:}prop'][0];
 
 		return $order;
 	}

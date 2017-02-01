@@ -54,9 +54,10 @@ class QueryParser extends Service {
 			},
 			'{DAV:}scope' => Scope::class,
 			'{DAV:}where' => function (Reader $reader) {
-				return array_map(function ($element) {
+				$operators = array_map(function ($element) {
 					return $element['value'];
 				}, $reader->parseGetElements());
+				return (isset($operators[0])) ? $operators[0] : null;
 			},
 			'{DAV:}prop' => Element\Elements::class,
 			'{DAV:}order' => Order::class,

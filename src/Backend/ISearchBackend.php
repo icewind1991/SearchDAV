@@ -23,6 +23,7 @@ namespace SearchDAV\Backend;
 
 use Sabre\DAV\INode;
 use SearchDAV\XML\BasicSearch;
+use SearchDAV\XML\Scope;
 
 interface ISearchBackend {
 	/**
@@ -31,6 +32,11 @@ interface ISearchBackend {
 	 * The search arbiter is the URI that the client will send it's SEARCH requests to
 	 * Note that this is not required to be the same as the search scopes which determine what to search in
 	 *
+	 * The returned value should be a path relative the root of the dav server.
+	 *
+	 * For example, if you want to support SEARCH requests on `https://example.com/dav.php/search`
+	 * with the sabre/dav server listening on `/dav.php` you should return `search` as arbiter path.
+	 *
 	 * @return string
 	 */
 	public function getArbiterPath();
@@ -38,23 +44,43 @@ interface ISearchBackend {
 	/**
 	 * Whether or not the search backend supports search requests on this scope
 	 *
-	 * @param string $href
-	 * @param string|integer $depth 0, 1 or 'inifinite'
+	 * The scope defines the resource that it being searched, such as a folder or address book.
+	 *
+	 * Note that a search arbiter has no inherit limitations on which scopes it can support and scopes
+	 * that reside on a different dav server entirely might be considered valid by an implementation.
+	 *
+	 * One example use case for this would be a service that provides additional indexing on a 3rd party service.
+	 *
+	 * @param string $href an absolute uri of the search scope
+	 * @param string|integer $depth 0, 1 or 'infinite'
+	 * @param string|null $path the path of the search scope relative to the dav server, or null if the scope is outside the dav server
 	 * @return bool
 	 */
-	public function isValidScope($href, $depth);
+	public function isValidScope($href, $depth, $path);
 
 	/**
 	 * List the available properties that can be used in search
 	 *
+	 * This is used to tell the search client what properties can be queried, used to filter and used to sort.
+	 *
+	 * Since sabre's PropFind handling mechanism is used to return the properties to the client, it's required that all
+	 * properties which are listed as selectable have a PropFind handler set.
+	 *
+	 * @param string $href an absolute uri of the search scope
+	 * @param string|null $path the path of the search scope relative to the dav server, or null if the scope is outside the dav server
 	 * @return SearchPropertyDefinition[]
 	 */
-	public function getPropertyDefinitionsForScope($href);
+	public function getPropertyDefinitionsForScope($href, $path);
 
 	/**
-	 * @param INode $searchNode the DAV node that the search request was made to
+	 * Preform the search request
+	 *
+	 * The search results consist of the uri for the found resource and an INode describing the resource
+	 * To return the properties requested by the query sabre's existing PropFind method is used, thus the search implementation
+	 * is not required to collect these properties and is free to ignore the `select` part of the query
+	 *
 	 * @param BasicSearch $query
 	 * @return SearchResult[]
 	 */
-	public function search(INode $searchNode, BasicSearch $query);
+	public function search(BasicSearch $query);
 }

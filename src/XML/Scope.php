@@ -26,7 +26,20 @@ use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
 
 class Scope implements XmlDeserializable {
+	/**
+	 * @var string
+	 *
+	 * The absolute url of the search scope
+	 */
 	public $href;
+
+	/**
+	 * @var string|int 0, 1 or 'infinite'
+	 *
+	 * How deep the search query should be with 0 being only the scope itself,
+	 * 1 being all direct child entries of the scope and infinite being all entries
+	 * in the scope collection at any depth.
+	 */
 	public $depth;
 
 	static function xmlDeserialize(Reader $reader) {

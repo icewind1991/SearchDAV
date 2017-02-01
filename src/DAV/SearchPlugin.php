@@ -22,6 +22,7 @@
 namespace SearchDAV\DAV;
 
 use Sabre\DAV\Exception\BadRequest;
+use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\INode;
 use Sabre\DAV\Node;
 use Sabre\DAV\PropFind;
@@ -70,6 +71,14 @@ class SearchPlugin extends ServerPlugin {
 		}
 	}
 
+	private function getPathFromUri($uri) {
+		try {
+			return ($uri === '' && $this->server->getBaseUri() === '/') ? '' : $this->server->calculateUri($uri);
+		} catch (Forbidden $e) {
+			return null;
+		}
+	}
+
 	/**
 	 * SEARCH is allowed for users files
 	 *
@@ -77,7 +86,7 @@ class SearchPlugin extends ServerPlugin {
 	 * @return array
 	 */
 	public function getHTTPMethods($uri) {
-		$path = ($uri === '' && $this->server->getBaseUri() === '/') ? '' : $this->server->calculateUri($uri);
+		$path = $this->getPathFromUri($uri);
 		if ($this->searchBackend->getArbiterPath() === $path) {
 			return ['SEARCH'];
 		} else {
@@ -112,10 +121,9 @@ class SearchPlugin extends ServerPlugin {
 				}
 				/** @var BasicSearch $query */
 				$query = $xml['{DAV:}basicsearch'];
-				$node = $this->server->tree->getNodeForPath($request->getPath());
 				$response->setStatus(207);
 				$response->setHeader('Content-Type', 'application/xml; charset="utf-8"');
-				$results = $this->searchBackend->search($node, $query);
+				$results = $this->searchBackend->search($query);
 				$data = $this->server->generateMultiStatus($this->getPropertiesIteratorResults($results, $query->select), false);
 				$response->setBody($data);
 				return false;
@@ -126,11 +134,12 @@ class SearchPlugin extends ServerPlugin {
 				/** @var BasicSearch $query */
 				$query = $xml['{DAV:}basicsearch'];
 				$scopes = $query->from;
-				$results = array_map(function(Scope $scope) {
-					if ($this->searchBackend->isValidScope($scope->href, $scope->depth)) {
-						$searchProperties = $this->searchBackend->getPropertyDefinitionsForScope($scope->href);
+				$results = array_map(function (Scope $scope) {
+					$scopePath = $this->getPathFromUri($scope->href);
+					if ($this->searchBackend->isValidScope($scope->href, $scope->depth, $scopePath)) {
+						$searchProperties = $this->searchBackend->getPropertyDefinitionsForScope($scope->href, $scopePath);
 						$searchSchema = $this->getBasicSearchForProperties($searchProperties);
-						return new QueryDiscoverResponse($scope->href, $searchSchema , 200);
+						return new QueryDiscoverResponse($scope->href, $searchSchema, 200);
 					} else {
 						return new QueryDiscoverResponse($scope->href, null, 404); // TODO something other than 404? 403 maybe
 					}
@@ -185,9 +194,9 @@ class SearchPlugin extends ServerPlugin {
 
 	private function hashDefinition(SearchPropertyDefinition $definition) {
 		return $definition->dataType
-		. (($definition->searchable) ? '1' : '0')
-		. (($definition->sortable) ? '1' : '0')
-		. (($definition->selectable) ? '1' : '0');
+			. (($definition->searchable) ? '1' : '0')
+			. (($definition->sortable) ? '1' : '0')
+			. (($definition->selectable) ? '1' : '0');
 	}
 
 	/**
