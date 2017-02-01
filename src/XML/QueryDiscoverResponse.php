@@ -35,7 +35,7 @@ class QueryDiscoverResponse extends Response {
 	 * @param BasicSearchSchema|null $schema
 	 * @param null|int|string $httpStatus
 	 */
-	function __construct($href, BasicSearchSchema $schema, $httpStatus = null) {
+	function __construct($href, BasicSearchSchema $schema = null, $httpStatus = null) {
 		parent::__construct($href, [], $httpStatus);
 		$this->schema = $schema;
 
@@ -45,7 +45,7 @@ class QueryDiscoverResponse extends Response {
 		if ($status = $this->getHTTPStatus()) {
 			$writer->writeElement('{DAV:}status', 'HTTP/1.1 ' . $status . ' ' . \Sabre\HTTP\Response::$statusCodes[$status]);
 		}
-		$writer->writeElement('{DAV:}href', $writer->contextUri . \Sabre\HTTP\encodePath($this->getHref()));
+		$writer->writeElement('{DAV:}href', \Sabre\HTTP\encodePath($this->getHref()));
 
 		if ($this->schema) {
 			$writer->writeElement('{DAV:}query-schema', [
