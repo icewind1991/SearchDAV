@@ -42,6 +42,17 @@ class Order implements XmlDeserializable {
 	 */
 	public $order;
 
+	/**
+	 * Order constructor.
+	 *
+	 * @param string $property
+	 * @param string $order
+	 */
+	public function __construct($property = '', $order = self::ASC) {
+		$this->property = $property;
+		$this->order = $order;
+	}
+
 	static function xmlDeserialize(Reader $reader) {
 		$order = new self();
 

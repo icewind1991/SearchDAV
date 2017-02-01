@@ -58,6 +58,18 @@ class Operator implements XmlDeserializable {
 	 */
 	public $arguments;
 
+	/**
+	 * Operator constructor.
+	 *
+	 * @param string $type
+	 * @param array $arguments
+	 */
+	public function __construct($type = '', array $arguments = []) {
+		$this->type = $type;
+		$this->arguments = $arguments;
+	}
+
+
 	static function xmlDeserialize(Reader $reader) {
 		$operator = new self();
 

@@ -26,8 +26,22 @@ use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
 
 class Literal implements XmlDeserializable {
-	/** @var string|boolean|\DateTime|integer */
+	/**
+	 * @var string|boolean|\DateTime|integer
+	 *
+	 * The value of the literal
+	 */
 	public $value;
+
+	/**
+	 * Literal constructor.
+	 *
+	 * @param bool|\DateTime|int|string $value
+	 */
+	public function __construct($value = '') {
+		$this->value = $value;
+	}
+
 
 	static function xmlDeserialize(Reader $reader) {
 		$literal = new self();

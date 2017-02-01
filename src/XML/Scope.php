@@ -29,7 +29,8 @@ class Scope implements XmlDeserializable {
 	/**
 	 * @var string
 	 *
-	 * The absolute url of the search scope
+	 * The scope of the search, either as absolute uri or as a path relative to the
+	 * search arbiter.
 	 */
 	public $href;
 
@@ -41,6 +42,15 @@ class Scope implements XmlDeserializable {
 	 * in the scope collection at any depth.
 	 */
 	public $depth;
+
+	/**
+	 * @param string $href
+	 * @param int|string $depth
+	 */
+	public function __construct($href = '', $depth = 1) {
+		$this->href = $href;
+		$this->depth = $depth;
+	}
 
 	static function xmlDeserialize(Reader $reader) {
 		$scope = new self();
