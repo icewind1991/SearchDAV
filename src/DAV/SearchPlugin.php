@@ -126,8 +126,11 @@ class SearchPlugin extends ServerPlugin {
 				$query = $xml['{DAV:}basicsearch'];
 				$response->setStatus(207);
 				$response->setHeader('Content-Type', 'application/xml; charset="utf-8"');
+				foreach ($query->from as $scope) {
+					$scope->path = $this->getPathFromUri($scope->href);
+				}
 				$results = $this->searchBackend->search($query);
-				$data = $this->server->generateMultiStatus($this->getPropertiesIteratorResults($results, $query->select), false);
+				$data = $this->server->generateMultiStatus(iterator_to_array($this->getPropertiesIteratorResults($results, $query->select)), false);
 				$response->setBody($data);
 				return false;
 			case '{DAV:}query-schema-discovery':
@@ -138,9 +141,9 @@ class SearchPlugin extends ServerPlugin {
 				$query = $xml['{DAV:}basicsearch'];
 				$scopes = $query->from;
 				$results = array_map(function (Scope $scope) {
-					$scopePath = $this->getPathFromUri($scope->href);
-					if ($this->searchBackend->isValidScope($scope->href, $scope->depth, $scopePath)) {
-						$searchProperties = $this->searchBackend->getPropertyDefinitionsForScope($scope->href, $scopePath);
+					$scope->path = $this->getPathFromUri($scope->href);
+					if ($this->searchBackend->isValidScope($scope->href, $scope->depth, $scope->path)) {
+						$searchProperties = $this->searchBackend->getPropertyDefinitionsForScope($scope->href, $scope->path);
 						$searchSchema = $this->getBasicSearchForProperties($searchProperties);
 						return new QueryDiscoverResponse($scope->href, $searchSchema, 200);
 					} else {
@@ -171,7 +174,7 @@ class SearchPlugin extends ServerPlugin {
 	 * @param int $depth
 	 * @return \Iterator
 	 */
-	function getPropertiesIteratorResults(array $results, $propertyNames = [], $depth = 0) {
+	function getPropertiesIteratorResults($results, $propertyNames = [], $depth = 0) {
 		$propFindType = $propertyNames ? PropFind::NORMAL : PropFind::ALLPROPS;
 
 		foreach ($results as $result) {

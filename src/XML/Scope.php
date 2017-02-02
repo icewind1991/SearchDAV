@@ -44,6 +44,13 @@ class Scope implements XmlDeserializable {
 	public $depth;
 
 	/**
+	 * @var string|null
+	 *
+	 * the path of the search scope relative to the dav server, or null if the scope is outside the dav server
+	 */
+	public $path;
+
+	/**
 	 * @param string $href
 	 * @param int|string $depth
 	 */
