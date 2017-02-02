@@ -34,10 +34,10 @@ class Operator implements XmlDeserializable {
 	const OPERATION_LESS_OR_EQUAL_THAN = '{DAV:}lte';
 	const OPERATION_GREATER_THAN = '{DAV:}gt';
 	const OPERATION_GREATER_OR_EQUAL_THAN = '{DAV:}gte';
-	const OPERATION_IS_COLLECTION = '[DAV:}is-collection';
-	const OPERATION_IS_DEFINED = '[DAV:}is-defined';
-	const OPERATION_IS_LIKE = '[DAV:}like';
-	const OPERATION_CONTAINS = '[DAV:}contains';
+	const OPERATION_IS_COLLECTION = '{DAV:}is-collection';
+	const OPERATION_IS_DEFINED = '{DAV:}is-defined';
+	const OPERATION_IS_LIKE = '{DAV:}like';
+	const OPERATION_CONTAINS = '{DAV:}contains';
 
 	/**
 	 * @var string
