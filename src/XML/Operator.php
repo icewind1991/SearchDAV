@@ -73,12 +73,11 @@ class Operator implements XmlDeserializable {
 	static function xmlDeserialize(Reader $reader) {
 		$operator = new self();
 
-		// If there's no children, we don't do anything.
+		$operator->type = $reader->getClark();
 		if ($reader->isEmptyElement) {
 			$reader->next();
-			return null;
+			return $operator;
 		}
-		$operator->type = $reader->getClark();
 		$reader->read();
 		do {
 			if ($reader->nodeType === Reader::ELEMENT) {
