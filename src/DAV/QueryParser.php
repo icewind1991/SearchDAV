@@ -70,7 +70,8 @@ class QueryParser extends Service {
 			'{DAV:}or' => Operator::class,
 			'{DAV:}like' => Operator::class,
 			'{DAV:}contains' => Operator::class,
-			'{DAV:}not' => Operator::class
+			'{DAV:}not' => Operator::class,
+			'{DAV:}is-collection' => Operator::class,
 		];
 	}
 }
