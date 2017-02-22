@@ -22,12 +22,14 @@
 namespace SearchDAV\Test;
 
 
+use Sabre\Xml\Service;
 use SearchDAV\DAV\QueryParser;
 use SearchDAV\XML\BasicSearch;
 use SearchDAV\XML\Literal;
 use SearchDAV\XML\Operator;
 use SearchDAV\XML\Order;
 use SearchDAV\XML\Scope;
+use SearchDAV\XML\SupportedQueryGrammar;
 
 
 class QueryParserTest extends \PHPUnit_Framework_TestCase {
@@ -84,5 +86,15 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 		$query = file_get_contents(__DIR__ . '/nofrom.xml');
 		$parser = new QueryParser();
 		$parser->parse($query, null, $rootElementName);
+	}
+
+	public function testSerializeSupportedGrammar() {
+		$supportedGrammar = new SupportedQueryGrammar();
+
+		$parser = new QueryParser();
+		$serialized = $parser->write('{DAV:}supported-query-grammar-set', $supportedGrammar);
+
+		$xml = new Service();
+		$this->assertEquals($xml->parse(fopen(__DIR__ . '/supportedgrammar.xml', 'r')), $xml->parse($serialized));
 	}
 }

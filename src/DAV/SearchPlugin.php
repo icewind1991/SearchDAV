@@ -135,7 +135,9 @@ class SearchPlugin extends ServerPlugin {
 			case '{DAV:}query-schema-discovery':
 				return $this->discover->handelDiscoverRequest($xml, $request, $response);
 			default:
-				throw new BadRequest('Unexpected document type: ' . $documentType . ' for this Content-Type');
+				$response->setStatus(400);
+				$response->setBody('Unexpected document type: ' . $documentType . ' for this Content-Type, expected {DAV:}searchrequest or {DAV:}query-schema-discovery');
+				return false;
 		}
 	}
 }

@@ -55,8 +55,10 @@ class DiscoverHandler {
 	}
 
 	public function handelDiscoverRequest($xml, RequestInterface $request, ResponseInterface $response) {
-		if (!$xml['{DAV:}basicsearch']) {
-			throw new BadRequest('Unexpected xml content for query-schema-discovery, expected basicsearch');
+		if (!isset($xml['{DAV:}basicsearch'])) {
+			$response->setStatus(400);
+			$response->setBody('Unexpected xml content for query-schema-discovery, expected basicsearch');
+			return false;
 		}
 		/** @var BasicSearch $query */
 		$query = $xml['{DAV:}basicsearch'];

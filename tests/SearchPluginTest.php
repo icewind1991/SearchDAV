@@ -23,6 +23,8 @@ namespace SearchDAV\Test;
 
 
 use Sabre\DAV\FS\Directory;
+use Sabre\DAV\INode;
+use Sabre\DAV\PropFind;
 use Sabre\DAV\Server;
 use Sabre\DAV\Xml\Service;
 use Sabre\HTTP\Request;
@@ -37,6 +39,7 @@ use SearchDAV\XML\Literal;
 use SearchDAV\XML\Operator;
 use SearchDAV\XML\Order;
 use SearchDAV\XML\Scope;
+use SearchDAV\XML\SupportedQueryGrammar;
 
 class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 	/** @var ISearchBackend|\PHPUnit_Framework_MockObject_MockObject */
@@ -47,6 +50,53 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 
 		$this->searchBackend = $this->getMockBuilder(ISearchBackend::class)
 			->getMock();
+	}
+
+	public function testNoXmlBody() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$request = new Request('SEARCH', 'foo', [
+			'Content-Type' => 'text/plain'
+		], fopen(__DIR__ . '/nofrom.xml', 'r'));
+		$response = new Response();
+
+		$plugin = new SearchPlugin($this->searchBackend);
+
+		$this->assertNotEquals(false, $plugin->searchHandler($request, $response));
+	}
+
+	public function testNotArbiterPath() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$request = new Request('SEARCH', 'bar', [
+			'Content-Type' => 'text/xml'
+		], fopen(__DIR__ . '/nofrom.xml', 'r'));
+		$response = new Response();
+
+		$plugin = new SearchPlugin($this->searchBackend);
+
+		$this->assertNotEquals(false, $plugin->searchHandler($request, $response));
+	}
+
+	public function testInvalidType() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$request = new Request('SEARCH', 'foo', [
+			'Content-Type' => 'text/xml'
+		], fopen(__DIR__ . '/invalidtype.xml', 'r'));
+		$response = new Response();
+
+		$plugin = new SearchPlugin($this->searchBackend);
+
+		$plugin->searchHandler($request, $response);
+
+		$this->assertEquals(400, $response->getStatus());
 	}
 
 	public function testHandleParseException() {
@@ -144,6 +194,64 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$parsedResponse = $parser->parse($response->getBody());
 		$expected = $parser->parse(fopen(__DIR__ . '/discoverresponse.xml', 'r'));
 		$this->assertEquals($expected, $parsedResponse);
+	}
+
+	public function testSchemaDiscoveryInvalidScope() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$plugin = new SearchPlugin($this->searchBackend);
+		$server = new Server();
+		$plugin->initialize($server);
+
+		$request = new Request('SEARCH', '/index.php/foo', [
+			'Content-Type' => 'text/xml'
+		]);
+		$request->setBaseUrl('/index.php');
+		$request->setBody(fopen(__DIR__ . '/discover.xml', 'r'));
+		$response = new Response();
+
+		$this->searchBackend->expects($this->once())
+			->method('isValidScope')
+			->willReturn(false);
+
+		$this->searchBackend->expects($this->never())
+			->method('getPropertyDefinitionsForScope');
+
+		$plugin->searchHandler($request, $response);
+
+		$parser = new Service();
+		$parsedResponse = $parser->parse($response->getBody());
+		$expected = $parser->parse(fopen(__DIR__ . '/invalidscoperesponse.xml', 'r'));
+		$this->assertEquals($expected, $parsedResponse);
+	}
+
+	public function testSchemaDiscoveryInvalid() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$plugin = new SearchPlugin($this->searchBackend);
+		$server = new Server();
+		$plugin->initialize($server);
+
+		$request = new Request('SEARCH', '/index.php/foo', [
+			'Content-Type' => 'text/xml'
+		]);
+		$request->setBaseUrl('/index.php');
+		$request->setBody(fopen(__DIR__ . '/invaliddiscover.xml', 'r'));
+		$response = new Response();
+
+		$this->searchBackend->expects($this->never())
+			->method('isValidScope');
+
+		$this->searchBackend->expects($this->never())
+			->method('getPropertyDefinitionsForScope');
+
+		$plugin->searchHandler($request, $response);
+
+		$this->assertEquals(400, $response->getStatus());
 	}
 
 	public function testSearchQuery() {
@@ -251,5 +359,82 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->searchHandler($request, $response);
 
 		$this->assertEquals(400, $response->getStatus());
+	}
+
+	public function testSearchQueryNoSelect() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$plugin = new SearchPlugin($this->searchBackend);
+		$server = new Server();
+		$plugin->initialize($server);
+
+		$request = new Request('SEARCH', '/index.php/foo', [
+			'Content-Type' => 'text/xml'
+		]);
+		$request->setBaseUrl('/index.php');
+		$request->setBody(fopen(__DIR__ . '/noselect.xml', 'r'));
+		$response = new Response();
+
+		$this->searchBackend->expects($this->any())
+			->method('isValidScope')
+			->willReturn(true);
+
+		$this->searchBackend->expects($this->never())
+			->method('search');
+
+		$plugin->searchHandler($request, $response);
+
+		$this->assertEquals(400, $response->getStatus());
+	}
+
+	public function testSearchInvalid() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$plugin = new SearchPlugin($this->searchBackend);
+		$server = new Server();
+		$plugin->initialize($server);
+
+		$request = new Request('SEARCH', '/index.php/foo', [
+			'Content-Type' => 'text/xml'
+		]);
+		$request->setBaseUrl('/index.php');
+		$request->setBody(fopen(__DIR__ . '/invalid.xml', 'r'));
+		$response = new Response();
+
+		$this->searchBackend->expects($this->any())
+			->method('isValidScope')
+			->willReturn(true);
+
+		$this->searchBackend->expects($this->never())
+			->method('search');
+
+		$plugin->searchHandler($request, $response);
+
+		$this->assertEquals(400, $response->getStatus());
+	}
+
+	public function testPropFindHandler() {
+		$propFind = new PropFind('bar', ['{DAV:}supported-query-grammar-set']);
+
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$plugin = new SearchPlugin($this->searchBackend);
+
+		/** @var INode $node */
+		$node = $this->getMockBuilder(INode::class)->getMock();
+		$plugin->propFindHandler($propFind, $node);
+
+		$this->assertEquals(null, $propFind->get('{DAV:}supported-query-grammar-set'));
+
+		$propFind = new PropFind('foo', ['{DAV:}supported-query-grammar-set']);
+		$plugin->propFindHandler($propFind, $node);
+
+		$this->assertEquals(new SupportedQueryGrammar(), $propFind->get('{DAV:}supported-query-grammar-set'));
 	}
 }
