@@ -53,10 +53,12 @@ class Scope implements XmlDeserializable {
 	/**
 	 * @param string $href
 	 * @param int|string $depth
+	 * @param string|null $path
 	 */
-	public function __construct($href = '', $depth = 1) {
+	public function __construct($href = '', $depth = 1, $path = null) {
 		$this->href = $href;
 		$this->depth = $depth;
+		$this->path = $path;
 	}
 
 	static function xmlDeserialize(Reader $reader) {

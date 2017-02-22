@@ -49,7 +49,7 @@ class QueryDiscoverResponse extends Response {
 
 		if ($this->schema) {
 			$writer->writeElement('{DAV:}query-schema', [
-				'{DAV:basicsearchschema}' => $this->schema
+ 				'{DAV:}basicsearchschema' => $this->schema
 			]);
 		}
 	}

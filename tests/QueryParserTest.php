@@ -55,4 +55,52 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 			new Order('{DAV:}getcontentlength', Order::ASC)
 		], $search->orderBy);
 	}
+
+	public function testParseNoOrder() {
+		$query = file_get_contents(__DIR__ . '/noorder.xml');
+		$parser = new QueryParser();
+		$xml = $parser->parse($query, null, $rootElementName);
+
+		$this->assertEquals('{DAV:}searchrequest', $rootElementName);
+		$this->assertArrayHasKey('{DAV:}basicsearch', $xml);
+
+		/** @var BasicSearch $search */
+		$search = $xml['{DAV:}basicsearch'];
+		$this->assertInstanceOf(BasicSearch::class, $search);
+
+		$this->assertEquals(['{DAV:}getcontentlength'], $search->select);
+		$this->assertEquals([
+			new Scope('/container1/', 'infinity'),
+			new Scope('/container2/', 1),
+		], $search->from);
+		$this->assertEquals(new Operator(Operator::OPERATION_IS_COLLECTION, []), $search->where);
+		$this->assertEquals([], $search->orderBy);
+	}
+
+	/**
+	 * @expectedException \Sabre\XML\ParseException
+	 */
+	public function testParseNoWhere() {
+		$query = file_get_contents(__DIR__ . '/nowhere.xml');
+		$parser = new QueryParser();
+		$parser->parse($query, null, $rootElementName);
+	}
+
+	/**
+	 * @expectedException \Sabre\XML\ParseException
+	 */
+	public function testParseNoFrom() {
+		$query = file_get_contents(__DIR__ . '/nofrom.xml');
+		$parser = new QueryParser();
+		$parser->parse($query, null, $rootElementName);
+	}
+
+	/**
+	 * @expectedException \Sabre\XML\ParseException
+	 */
+	public function testParseNoSelect() {
+		$query = file_get_contents(__DIR__ . '/noselect.xml');
+		$parser = new QueryParser();
+		$parser->parse($query, null, $rootElementName);
+	}
 }

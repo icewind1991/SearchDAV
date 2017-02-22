@@ -32,6 +32,7 @@ use Sabre\DAV\Xml\Element\Response;
 use Sabre\DAV\Xml\Response\MultiStatus;
 use Sabre\HTTP\RequestInterface;
 use Sabre\HTTP\ResponseInterface;
+use Sabre\Xml\ParseException;
 use Sabre\Xml\Writer;
 use SearchDAV\Backend\ISearchBackend;
 use SearchDAV\Backend\SearchPropertyDefinition;
@@ -55,11 +56,11 @@ class SearchPlugin extends ServerPlugin {
 
 	public function __construct(ISearchBackend $searchBackend) {
 		$this->searchBackend = $searchBackend;
+		$this->queryParser = new QueryParser();
 	}
 
 	public function initialize(Server $server) {
 		$this->server = $server;
-		$this->queryParser = new QueryParser($this->server->xml);
 		$server->on('method:SEARCH', [$this, 'searchHandler']);
 		$server->on('afterMethod:OPTIONS', [$this, 'optionHandler']);
 		$server->on('propFind', [$this, 'propFindHandler']);
@@ -98,7 +99,7 @@ class SearchPlugin extends ServerPlugin {
 	}
 
 	public function optionHandler(RequestInterface $request, ResponseInterface $response) {
-		if ($request->getPath() === '') {
+		if ($request->getPath() === $this->searchBackend->getArbiterPath()) {
 			$response->addHeader('DASL', '<DAV:basicsearch>');
 		}
 	}
@@ -111,11 +112,21 @@ class SearchPlugin extends ServerPlugin {
 			return;
 		}
 
-		$xml = $this->queryParser->parse(
-			$request->getBody(),
-			$request->getUrl(),
-			$documentType
-		);
+		if ($request->getPath() !== $this->searchBackend->getArbiterPath()) {
+			return;
+		}
+
+		try {
+			$xml = $this->queryParser->parse(
+				$request->getBody(),
+				$request->getUrl(),
+				$documentType
+			);
+		} catch (ParseException $e) {
+			$response->setStatus(400);
+			$response->setBody('Parse error: ' . $e->getMessage());
+			return false;
+		}
 
 		switch ($documentType) {
 			case '{DAV:}searchrequest':

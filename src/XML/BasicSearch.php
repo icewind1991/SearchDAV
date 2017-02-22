@@ -21,6 +21,7 @@
 
 namespace SearchDAV\XML;
 
+use Sabre\Xml\ParseException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
 
@@ -62,10 +63,15 @@ class BasicSearch implements XmlDeserializable {
 		$search = new self();
 
 		$elements = \Sabre\Xml\Deserializer\keyValue($reader);
-		$search->select = isset($elements['{DAV:}select']) ? $elements['{DAV:}select'] : null;
-		$search->from = isset($elements['{DAV:}from']) ? $elements['{DAV:}from'] : null;
+
+		if (!isset($elements['{DAV:}from'])) {
+			throw new ParseException('Missing {DAV:}from when parsing {DAV:}basicsearch');
+		}
+
+		$search->select = isset($elements['{DAV:}select']) ? $elements['{DAV:}select'] : [];
+		$search->from = $elements['{DAV:}from'];
 		$search->where = isset($elements['{DAV:}where']) ? $elements['{DAV:}where'] : null;
-		$search->orderBy = isset($elements['{DAV:}orderby']) ? $elements['{DAV:}orderby'] : null;
+		$search->orderBy = isset($elements['{DAV:}orderby']) ? $elements['{DAV:}orderby'] : [];
 
 		return $search;
 	}
