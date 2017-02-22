@@ -1,5 +1,9 @@
 # SearchDAV
 
+[![Build Status](https://travis-ci.org/icewind1991/SearchDAV.svg?branch=master)](https://travis-ci.org/icewind1991/SearchDAV)
+[![codecov](https://codecov.io/gh/icewind1991/SearchDAV/branch/master/graph/badge.svg)](https://codecov.io/gh/icewind1991/SearchDAV)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/icewind1991/SearchDAV/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/icewind1991/SearchDAV/?branch=master)
+
 A sabre/dav plugin to implement rfc5323 SEARCH
 
 ## Usage
