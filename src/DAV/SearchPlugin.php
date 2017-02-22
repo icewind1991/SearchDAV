@@ -135,6 +135,16 @@ class SearchPlugin extends ServerPlugin {
 				}
 				/** @var BasicSearch $query */
 				$query = $xml['{DAV:}basicsearch'];
+				if (!$query->where) {
+					$response->setStatus(400);
+					$response->setBody('Parse error: Missing {DAV:}where from {DAV:}basicsearch');
+					return false;
+				}
+				if (!$query->select) {
+					$response->setStatus(400);
+					$response->setBody('Parse error: Missing {DAV:}select from {DAV:}basicsearch');
+					return false;
+				}
 				$response->setStatus(207);
 				$response->setHeader('Content-Type', 'application/xml; charset="utf-8"');
 				foreach ($query->from as $scope) {

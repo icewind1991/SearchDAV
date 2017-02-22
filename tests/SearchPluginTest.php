@@ -196,4 +196,60 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$expected = $parser->parse(fopen(__DIR__ . '/searchresult.xml', 'r'));
 		$this->assertEquals($expected, $parsedResponse);
 	}
+
+	public function testSearchQueryNoFrom() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$plugin = new SearchPlugin($this->searchBackend);
+		$server = new Server();
+		$plugin->initialize($server);
+
+		$request = new Request('SEARCH', '/index.php/foo', [
+			'Content-Type' => 'text/xml'
+		]);
+		$request->setBaseUrl('/index.php');
+		$request->setBody(fopen(__DIR__ . '/nofrom.xml', 'r'));
+		$response = new Response();
+
+		$this->searchBackend->expects($this->any())
+			->method('isValidScope')
+			->willReturn(true);
+
+		$this->searchBackend->expects($this->never())
+			->method('search');
+
+		$plugin->searchHandler($request, $response);
+
+		$this->assertEquals(400, $response->getStatus());
+	}
+
+	public function testSearchQueryNoWhere() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$plugin = new SearchPlugin($this->searchBackend);
+		$server = new Server();
+		$plugin->initialize($server);
+
+		$request = new Request('SEARCH', '/index.php/foo', [
+			'Content-Type' => 'text/xml'
+		]);
+		$request->setBaseUrl('/index.php');
+		$request->setBody(fopen(__DIR__ . '/nowhere.xml', 'r'));
+		$response = new Response();
+
+		$this->searchBackend->expects($this->any())
+			->method('isValidScope')
+			->willReturn(true);
+
+		$this->searchBackend->expects($this->never())
+			->method('search');
+
+		$plugin->searchHandler($request, $response);
+
+		$this->assertEquals(400, $response->getStatus());
+	}
 }
