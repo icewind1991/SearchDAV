@@ -4,8 +4,12 @@ php:
   - '7.0'
   - '7.1'
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 install:
-  - composer install --dev --no-interaction
+  - composer install --no-interaction
 
 script:
   - cd tests

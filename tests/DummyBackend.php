@@ -34,11 +34,11 @@ class DummyBackend implements ISearchBackend {
 		return '';
 	}
 
-	public function isValidScope($href, $depth) {
+	public function isValidScope($href, $depth, $path) {
 		return true;
 	}
 
-	public function getPropertyDefinitionsForScope($href) {
+	public function getPropertyDefinitionsForScope($href, $path) {
 		return [
 			new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
 			new SearchPropertyDefinition('{DAV:}getcontenttype', true, true, true),
@@ -47,7 +47,7 @@ class DummyBackend implements ISearchBackend {
 		];
 	}
 
-	public function search(INode $searchNode, BasicSearch $query) {
+	public function search(BasicSearch $query) {
 		return [
 			new SearchResult(new SimpleFile('foo.txt', 'foobar', 'text/plain'), '/bar/foo.txt')
 		];

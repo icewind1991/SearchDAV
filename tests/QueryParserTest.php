@@ -80,26 +80,8 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @expectedException \Sabre\XML\ParseException
 	 */
-	public function testParseNoWhere() {
-		$query = file_get_contents(__DIR__ . '/nowhere.xml');
-		$parser = new QueryParser();
-		$parser->parse($query, null, $rootElementName);
-	}
-
-	/**
-	 * @expectedException \Sabre\XML\ParseException
-	 */
 	public function testParseNoFrom() {
 		$query = file_get_contents(__DIR__ . '/nofrom.xml');
-		$parser = new QueryParser();
-		$parser->parse($query, null, $rootElementName);
-	}
-
-	/**
-	 * @expectedException \Sabre\XML\ParseException
-	 */
-	public function testParseNoSelect() {
-		$query = file_get_contents(__DIR__ . '/noselect.xml');
 		$parser = new QueryParser();
 		$parser->parse($query, null, $rootElementName);
 	}
