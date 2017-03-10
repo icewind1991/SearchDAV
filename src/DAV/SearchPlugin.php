@@ -45,6 +45,8 @@ use SearchDAV\XML\Scope;
 use SearchDAV\XML\SupportedQueryGrammar;
 
 class SearchPlugin extends ServerPlugin {
+	const SEARCHDAV_NS = 'https://github.com/icewind1991/SearchDAV/ns';
+
 	/** @var Server */
 	private $server;
 

@@ -35,6 +35,7 @@ use SearchDAV\Backend\SearchPropertyDefinition;
 use SearchDAV\Backend\SearchResult;
 use SearchDAV\DAV\SearchPlugin;
 use SearchDAV\XML\BasicSearch;
+use SearchDAV\XML\Limit;
 use SearchDAV\XML\Literal;
 use SearchDAV\XML\Operator;
 use SearchDAV\XML\Order;
@@ -286,6 +287,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			'{DAV:}getcontentlength',
 			new Literal(10000)
 		]);
+		$query->limit = new Limit();
 
 		$this->searchBackend->expects($this->once())
 			->method('search')

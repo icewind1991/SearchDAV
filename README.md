@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/icewind1991/SearchDAV/branch/master/graph/badge.svg)](https://codecov.io/gh/icewind1991/SearchDAV)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/icewind1991/SearchDAV/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/icewind1991/SearchDAV/?branch=master)
 
-A sabre/dav plugin to implement rfc5323 SEARCH
+A sabre/dav plugin to implement [rfc5323](https://tools.ietf.org/search/rfc5323) SEARCH
 
 ## Usage
 

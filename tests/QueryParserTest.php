@@ -25,6 +25,7 @@ namespace SearchDAV\Test;
 use Sabre\Xml\Service;
 use SearchDAV\DAV\QueryParser;
 use SearchDAV\XML\BasicSearch;
+use SearchDAV\XML\Limit;
 use SearchDAV\XML\Literal;
 use SearchDAV\XML\Operator;
 use SearchDAV\XML\Order;
@@ -96,5 +97,24 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 
 		$xml = new Service();
 		$this->assertEquals($xml->parse(fopen(__DIR__ . '/supportedgrammar.xml', 'r')), $xml->parse($serialized));
+	}
+
+	public function testParseLimit() {
+		$query = file_get_contents(__DIR__ . '/limit.xml');
+		$parser = new QueryParser();
+		$xml = $parser->parse($query, null, $rootElementName);
+
+		$this->assertEquals('{DAV:}searchrequest', $rootElementName);
+		$this->assertArrayHasKey('{DAV:}basicsearch', $xml);
+
+		/** @var BasicSearch $search */
+		$search = $xml['{DAV:}basicsearch'];
+		$this->assertInstanceOf(BasicSearch::class, $search);
+
+		$this->assertEquals(['{DAV:}getcontentlength'], $search->select);
+		$limit = new Limit();
+		$limit->firstResult = 20;
+		$limit->maxResults = 10;
+		$this->assertEquals($limit, $search->limit);
 	}
 }
