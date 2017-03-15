@@ -58,7 +58,7 @@ class Order implements XmlDeserializable {
 
 		$childs = \Sabre\Xml\Deserializer\keyValue($reader);
 
-		$order->order = isset($childs['{DAV:}descending']) ? self::DESC : self::ASC;
+		$order->order = array_key_exists('{DAV:}descending', $childs) ? self::DESC : self::ASC;
 		$order->property = $childs['{DAV:}prop'][0];
 
 		return $order;

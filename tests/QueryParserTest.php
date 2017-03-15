@@ -59,6 +59,31 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 		], $search->orderBy);
 	}
 
+	public function testParseDescending() {
+		$query = file_get_contents(__DIR__ . '/descending.xml');
+		$parser = new QueryParser();
+		$xml = $parser->parse($query, null, $rootElementName);
+
+		$this->assertEquals('{DAV:}searchrequest', $rootElementName);
+		$this->assertArrayHasKey('{DAV:}basicsearch', $xml);
+
+		/** @var BasicSearch $search */
+		$search = $xml['{DAV:}basicsearch'];
+		$this->assertInstanceOf(BasicSearch::class, $search);
+
+		$this->assertEquals(['{DAV:}getcontentlength'], $search->select);
+		$this->assertEquals([
+			new Scope('/container1/', 'infinity')
+		], $search->from);
+		$this->assertEquals(new Operator(Operator::OPERATION_GREATER_THAN, [
+			'{DAV:}getcontentlength',
+			new Literal(10000)
+		]), $search->where);
+		$this->assertEquals([
+			new Order('{DAV:}getcontentlength', Order::DESC)
+		], $search->orderBy);
+	}
+
 	public function testParseNoOrder() {
 		$query = file_get_contents(__DIR__ . '/noorder.xml');
 		$parser = new QueryParser();
