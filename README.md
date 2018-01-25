@@ -48,9 +48,9 @@ the search schema that is supported and implements the actual search.
 
 For a full list of methods required and their description see [`ISearchBackend.php`](src/Backend/ISearchBackend.php)
 
-### BasicSearch
+### Query
 
-The `BasicSearch` class defines the query that was made by the client and consists of four parts:
+The `Query` class defines the query that was made by the client and consists of four parts:
 
 - select: the properties are requested.
 - from: the scope(s) in which the search should be made.
@@ -58,5 +58,5 @@ The `BasicSearch` class defines the query that was made by the client and consis
 - orderBy: how the search results should be ordered.
 
 For further information about these elements see
- [`BasicSearch.php`](src/XML/BasicSearch.php), [`Scope.php`](src/XML/Scope.php),
-  [`Operator.php`](src/XML/Operator.php) and [`Order.php`](src/XML/Order.php)
+ [`Query.php`](src/Query/Query.php), [`Scope.php`](src/Query/Scope.php),
+  [`Operator.php`](src/Query/Operator.php) and [`Order.php`](src/Query/Order.php)
