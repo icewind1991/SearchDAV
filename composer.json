@@ -1,7 +1,7 @@
 {
 	"name": "icewind/searchdav",
 	"description": "sabre/dav plugin to implement rfc5323 SEARCH",
-	"license": "AGPL",
+	"license": "AGPL-3.0-or-later",
 	"authors": [
 		{
 			"name": "Robin Appelman",
