@@ -50,12 +50,12 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals([
 			new Scope('/container1/', 'infinity')
 		], $search->from);
-		$this->assertEquals(new Operator(Operator::OPERATION_GREATER_THAN, [
+		$this->assertEquals(new Operator(\SearchDAV\Query\Operator::OPERATION_GREATER_THAN, [
 			'{DAV:}getcontentlength',
 			new Literal(10000)
 		]), $search->where);
 		$this->assertEquals([
-			new Order('{DAV:}getcontentlength', Order::ASC)
+			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::ASC)
 		], $search->orderBy);
 	}
 
@@ -75,12 +75,12 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals([
 			new Scope('/container1/', 'infinity')
 		], $search->from);
-		$this->assertEquals(new Operator(Operator::OPERATION_GREATER_THAN, [
+		$this->assertEquals(new Operator(\SearchDAV\Query\Operator::OPERATION_GREATER_THAN, [
 			'{DAV:}getcontentlength',
 			new Literal(10000)
 		]), $search->where);
 		$this->assertEquals([
-			new Order('{DAV:}getcontentlength', Order::DESC)
+			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::DESC)
 		], $search->orderBy);
 	}
 
@@ -101,7 +101,7 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 			new Scope('/container1/', 'infinity'),
 			new Scope('/container2/', 1),
 		], $search->from);
-		$this->assertEquals(new Operator(Operator::OPERATION_IS_COLLECTION, []), $search->where);
+		$this->assertEquals(new Operator(\SearchDAV\Query\Operator::OPERATION_IS_COLLECTION, []), $search->where);
 		$this->assertEquals([], $search->orderBy);
 	}
 

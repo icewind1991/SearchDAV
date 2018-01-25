@@ -26,6 +26,7 @@ use Sabre\DAV\INode;
 use Sabre\DAV\SimpleFile;
 use SearchDAV\Backend\ISearchBackend;
 use SearchDAV\Backend\SearchResult;
+use SearchDAV\Query\Query;
 use SearchDAV\XML\BasicSearch;
 use SearchDAV\Backend\SearchPropertyDefinition;
 
@@ -47,7 +48,7 @@ class DummyBackend implements ISearchBackend {
 		];
 	}
 
-	public function search(BasicSearch $query) {
+	public function search(Query $query) {
 		return [
 			new SearchResult(new SimpleFile('foo.txt', 'foobar', 'text/plain'), '/bar/foo.txt')
 		];

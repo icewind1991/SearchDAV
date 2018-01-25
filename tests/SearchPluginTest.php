@@ -34,6 +34,7 @@ use SearchDAV\Backend\ISearchBackend;
 use SearchDAV\Backend\SearchPropertyDefinition;
 use SearchDAV\Backend\SearchResult;
 use SearchDAV\DAV\SearchPlugin;
+use SearchDAV\Query\Query;
 use SearchDAV\XML\BasicSearch;
 use SearchDAV\XML\Limit;
 use SearchDAV\XML\Literal;
@@ -275,19 +276,20 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->method('isValidScope')
 			->willReturn(true);
 
-		$query = new BasicSearch();
-		$query->orderBy = [
-			new Order('{DAV:}getcontentlength', Order::ASC)
+		$lengthProp = new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER);
+		$orderBy = [
+			new \SearchDAV\Query\Order($lengthProp, \SearchDAV\Query\Order::ASC)
 		];
-		$query->select = ['{DAV:}getcontentlength'];
-		$query->from = [
+		$select = [$lengthProp];
+		$from = [
 			new Scope('/container1/', 'infinity', '/container1/')
 		];
-		$query->where = new Operator(Operator::OPERATION_GREATER_THAN, [
-			'{DAV:}getcontentlength',
+		$where = new \SearchDAV\Query\Operator(\SearchDAV\Query\Operator::OPERATION_GREATER_THAN, [
+			$lengthProp,
 			new Literal(10000)
 		]);
-		$query->limit = new Limit();
+		$limit = new Limit();
+		$query = new Query($select, $from, $where, $orderBy, $limit);
 
 		$this->searchBackend->expects($this->once())
 			->method('search')
@@ -297,6 +299,12 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 					new Directory('/foo'),
 					'/foo'
 				)
+			]);
+
+		$this->searchBackend->expects($this->any())
+			->method('getPropertyDefinitionsForScope')
+			->willReturn([
+				$lengthProp
 			]);
 
 		$plugin->searchHandler($request, $response);
@@ -439,4 +447,39 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(new SupportedQueryGrammar(), $propFind->get('{DAV:}supported-query-grammar-set'));
 	}
+
+	public function testSearchQueryInvalidWhere() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
+
+		$plugin = new SearchPlugin($this->searchBackend);
+		$server = new Server();
+		$plugin->initialize($server);
+
+		$request = new Request('SEARCH', '/index.php/foo', [
+			'Content-Type' => 'text/xml'
+		]);
+		$request->setBaseUrl('/index.php');
+		$request->setBody(fopen(__DIR__ . '/invalidwhere.xml', 'r'));
+		$response = new Response();
+
+		$this->searchBackend->expects($this->any())
+			->method('isValidScope')
+			->willReturn(true);
+
+		$this->searchBackend->expects($this->never())
+			->method('search');
+
+		$this->searchBackend->expects($this->once())
+			->method('getPropertyDefinitionsForScope')
+			->willReturn([
+				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+			]);
+
+		$plugin->searchHandler($request, $response);
+
+		$this->assertEquals(400, $response->getStatus());
+	}
+
 }
