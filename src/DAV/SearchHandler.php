@@ -112,7 +112,7 @@ class SearchHandler {
 		}, $xml->orderBy);
 		$select = array_map(function ($propName) use ($allProps) {
 			if (!isset($allProps[$propName])) {
-				throw new BadRequest('requested property is not a valid property for this scope');
+				return;
 			}
 			$prop = $allProps[$propName];
 			if (!$prop->selectable) {
@@ -120,6 +120,7 @@ class SearchHandler {
 			}
 			return $prop;
 		}, $xml->select);
+		$select = array_filter($select);
 
 		$where = $this->transformOperator($xml->where, $allProps);
 
