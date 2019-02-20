@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Robin Appelman <robin@icewind.nl>
  *
@@ -50,12 +50,12 @@ class Operator implements XmlDeserializable {
 	 * @param string $type
 	 * @param array $arguments
 	 */
-	public function __construct($type = '', array $arguments = []) {
+	public function __construct(string $type = '', array $arguments = []) {
 		$this->type = $type;
 		$this->arguments = $arguments;
 	}
 
-	static function xmlDeserialize(Reader $reader) {
+	static function xmlDeserialize(Reader $reader): Operator {
 		$operator = new self();
 
 		$operator->type = $reader->getClark();

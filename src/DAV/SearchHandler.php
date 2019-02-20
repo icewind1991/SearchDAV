@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Robin Appelman <robin@icewind.nl>
  *
@@ -98,6 +98,7 @@ class SearchHandler {
 	 * @param BasicSearch $xml
 	 * @param SearchPropertyDefinition[] $allProps
 	 * @return Query
+	 * @throws BadRequest
 	 */
 	private function getQueryForXML(BasicSearch $xml, array $allProps) {
 		$orderBy = array_map(function(\SearchDAV\XML\Order $order) use ($allProps) {
@@ -127,6 +128,12 @@ class SearchHandler {
 		return new Query($select, $xml->from, $where, $orderBy, $xml->limit);
 	}
 
+	/**
+	 * @param \SearchDAV\XML\Operator $operator
+	 * @param array $allProps
+	 * @return Operator
+	 * @throws BadRequest
+	 */
 	private function transformOperator(\SearchDAV\XML\Operator $operator, array $allProps) {
 		$arguments = array_map(function($argument) use ($allProps) {
 			if (is_string($argument)) {

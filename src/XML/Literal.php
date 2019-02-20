@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Robin Appelman <robin@icewind.nl>
  *
@@ -26,7 +26,7 @@ use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
 
 class Literal extends \SearchDAV\Query\Literal implements XmlDeserializable {
-	static function xmlDeserialize(Reader $reader) {
+	static function xmlDeserialize(Reader $reader): Literal {
 		$literal = new self();
 
 		$literal->value = $reader->readText();
