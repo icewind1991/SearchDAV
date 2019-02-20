@@ -348,6 +348,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->method('getArbiterPath')
 			->willReturn('foo');
 
+		$lengthProp = new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER);
 		$plugin = new SearchPlugin($this->searchBackend);
 		$server = new Server();
 		$plugin->initialize($server);
@@ -363,12 +364,20 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->method('isValidScope')
 			->willReturn(true);
 
-		$this->searchBackend->expects($this->never())
-			->method('search');
+		$this->searchBackend->expects($this->any())
+			->method('getPropertyDefinitionsForScope')
+			->willReturn([$lengthProp]);
+
+		$this->searchBackend->expects($this->once())
+			->method('search')
+		->willReturnCallback(function(Query $query) {
+			$this->assertNull($query->where);
+			return [];
+		});
 
 		$plugin->searchHandler($request, $response);
 
-		$this->assertEquals(400, $response->getStatus());
+		$this->assertEquals(207, $response->getStatus());
 	}
 
 	public function testSearchQueryNoSelect() {

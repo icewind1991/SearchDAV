@@ -62,11 +62,6 @@ class SearchHandler {
 		}
 		/** @var BasicSearch $query */
 		$query = $xml['{DAV:}basicsearch'];
-		if (!$query->where) {
-			$response->setStatus(400);
-			$response->setBody('Parse error: Missing {DAV:}where from {DAV:}basicsearch');
-			return false;
-		}
 		if (!$query->select) {
 			$response->setStatus(400);
 			$response->setBody('Parse error: Missing {DAV:}select from {DAV:}basicsearch');
@@ -123,7 +118,7 @@ class SearchHandler {
 		}, $xml->select);
 		$select = array_filter($select);
 
-		$where = $this->transformOperator($xml->where, $allProps);
+		$where = $xml->where ? $this->transformOperator($xml->where, $allProps) : null;
 
 		return new Query($select, $xml->from, $where, $orderBy, $xml->limit);
 	}
