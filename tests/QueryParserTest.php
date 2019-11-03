@@ -142,4 +142,38 @@ class QueryParserTest extends \PHPUnit_Framework_TestCase {
 		$limit->maxResults = 10;
 		$this->assertEquals($limit, $search->limit);
 	}
+
+	public function testParseComplexQuery() {
+		$query = file_get_contents(__DIR__ . '/complexquery.xml');
+		$parser = new QueryParser();
+		$xml = $parser->parse($query, null, $rootElementName);
+
+		$this->assertEquals('{DAV:}searchrequest', $rootElementName);
+		$this->assertArrayHasKey('{DAV:}basicsearch', $xml);
+
+		/** @var BasicSearch $search */
+		$search = $xml['{DAV:}basicsearch'];
+		$this->assertInstanceOf(BasicSearch::class, $search);
+
+		$this->assertEquals(['{DAV:}getcontentlength'], $search->select);
+		$this->assertEquals([
+			new Scope('/container1/', 'infinity')
+		], $search->from);
+		$this->assertEquals(new Operator(\SearchDAV\Query\Operator::OPERATION_AND, [
+			new Operator(\SearchDAV\Query\Operator::OPERATION_GREATER_THAN, [
+				'{DAV:}getcontentlength',
+				new Literal(10000)
+			]),
+			new Operator(\SearchDAV\Query\Operator::OPERATION_LESS_THAN, [
+				'{DAV:}getcontentlength',
+				new Literal(90000)
+			]),
+			new Operator(\SearchDAV\Query\Operator::OPERATION_CONTAINS, [
+				'Peter Forsberg'
+			]),
+		]), $search->where);
+		$this->assertEquals([
+			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::ASC)
+		], $search->orderBy);
+	}
 }
