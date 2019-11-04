@@ -76,7 +76,7 @@ class Operator implements XmlDeserializable {
 			if ($reader->nodeType === Reader::ELEMENT) {
 				$argument = $reader->parseCurrentElement();
 				if ($argument['name'] === '{DAV:}prop') {
-					$operator->arguments[] = $argument['value'][0];
+					$operator->arguments[] = $argument['value'][0] ?? '';
 				} else {
 					$operator->arguments[] = $argument['value'];
 				}
