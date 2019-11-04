@@ -23,6 +23,7 @@ namespace SearchDAV\XML;
 
 use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
+use SearchDAV\Query\Operator as QueryOperator;
 
 class Operator implements XmlDeserializable {
 	/**
@@ -63,6 +64,13 @@ class Operator implements XmlDeserializable {
 			$reader->next();
 			return $operator;
 		}
+
+		if ($operator->type === QueryOperator::OPERATION_CONTAINS) {
+			$operator->arguments[] = $reader->readString();
+			$reader->next();
+			return $operator;
+		}
+
 		$reader->read();
 		do {
 			if ($reader->nodeType === Reader::ELEMENT) {
