@@ -29,7 +29,12 @@ class Literal extends \SearchDAV\Query\Literal implements XmlDeserializable {
 	static function xmlDeserialize(Reader $reader): Literal {
 		$literal = new self();
 
-		$literal->value = $reader->readText();
+		if ($reader->isEmptyElement) {
+			$literal->value = '';
+		} else {
+			$literal->value = $reader->readText();
+		}
+
 		$reader->read();
 
 		return $literal;
