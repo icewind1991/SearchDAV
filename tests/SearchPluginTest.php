@@ -60,7 +60,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->willReturn('foo');
 
 		$request = new Request('SEARCH', 'foo', [
-			'Content-Type' => 'text/plain'
+			'Content-Type' => 'text/plain',
 		], fopen(__DIR__ . '/nofrom.xml', 'r'));
 		$response = new Response();
 
@@ -75,7 +75,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->willReturn('foo');
 
 		$request = new Request('SEARCH', 'bar', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		], fopen(__DIR__ . '/nofrom.xml', 'r'));
 		$response = new Response();
 
@@ -90,7 +90,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->willReturn('foo');
 
 		$request = new Request('SEARCH', 'foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		], fopen(__DIR__ . '/invalidtype.xml', 'r'));
 		$response = new Response();
 
@@ -107,7 +107,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->willReturn('foo');
 
 		$request = new Request('SEARCH', 'foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		], fopen(__DIR__ . '/nofrom.xml', 'r'));
 		$response = new Response();
 
@@ -171,7 +171,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/discover.xml', 'r'));
@@ -184,10 +184,12 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$this->searchBackend->expects($this->once())
 			->method('getPropertyDefinitionsForScope')
 			->willReturn([
-				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
 				new SearchPropertyDefinition('{DAV:}getcontenttype', true, true, true),
 				new SearchPropertyDefinition('{DAV:}displayname', true, true, true),
-				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
 			]);
 
 		$plugin->searchHandler($request, $response);
@@ -208,7 +210,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/discover.xml', 'r'));
@@ -239,7 +241,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/invaliddiscover.xml', 'r'));
@@ -266,7 +268,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/basicquery.xml', 'r'));
@@ -276,17 +278,18 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->method('isValidScope')
 			->willReturn(true);
 
-		$lengthProp = new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER);
+		$lengthProp = new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
+			SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER);
 		$orderBy = [
-			new \SearchDAV\Query\Order($lengthProp, \SearchDAV\Query\Order::ASC)
+			new \SearchDAV\Query\Order($lengthProp, \SearchDAV\Query\Order::ASC),
 		];
 		$select = [$lengthProp];
 		$from = [
-			new Scope('/container1/', 'infinity', '/container1/')
+			new Scope('/container1/', 'infinity', '/container1/'),
 		];
 		$where = new \SearchDAV\Query\Operator(\SearchDAV\Query\Operator::OPERATION_GREATER_THAN, [
 			$lengthProp,
-			new Literal(10000)
+			new Literal(10000),
 		]);
 		$limit = new Limit();
 		$query = new Query($select, $from, $where, $orderBy, $limit);
@@ -298,13 +301,13 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 				new SearchResult(
 					new Directory('/foo'),
 					'/foo'
-				)
+				),
 			]);
 
 		$this->searchBackend->expects($this->any())
 			->method('getPropertyDefinitionsForScope')
 			->willReturn([
-				$lengthProp
+				$lengthProp,
 			]);
 
 		$plugin->searchHandler($request, $response);
@@ -325,7 +328,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/nofrom.xml', 'r'));
@@ -348,13 +351,14 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 			->method('getArbiterPath')
 			->willReturn('foo');
 
-		$lengthProp = new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER);
+		$lengthProp = new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
+			SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER);
 		$plugin = new SearchPlugin($this->searchBackend);
 		$server = new Server();
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/nowhere.xml', 'r'));
@@ -370,10 +374,10 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 
 		$this->searchBackend->expects($this->once())
 			->method('search')
-		->willReturnCallback(function(Query $query) {
-			$this->assertNull($query->where);
-			return [];
-		});
+			->willReturnCallback(function (Query $query) {
+				$this->assertNull($query->where);
+				return [];
+			});
 
 		$plugin->searchHandler($request, $response);
 
@@ -390,7 +394,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/noselect.xml', 'r'));
@@ -418,7 +422,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/invalid.xml', 'r'));
@@ -467,7 +471,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/invalidwhere.xml', 'r'));
@@ -483,7 +487,8 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$this->searchBackend->expects($this->once())
 			->method('getPropertyDefinitionsForScope')
 			->willReturn([
-				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
 			]);
 
 		$plugin->searchHandler($request, $response);
@@ -491,40 +496,42 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(400, $response->getStatus());
 	}
 
-    public function testSearchQueryInvalidWhereNoProp() {
-        $this->searchBackend->expects($this->any())
-            ->method('getArbiterPath')
-            ->willReturn('foo');
+	public function testSearchQueryInvalidWhereNoProp() {
+		$this->searchBackend->expects($this->any())
+			->method('getArbiterPath')
+			->willReturn('foo');
 
-        $plugin = new SearchPlugin($this->searchBackend);
-        $server = new Server();
-        $plugin->initialize($server);
+		$plugin = new SearchPlugin($this->searchBackend);
+		$server = new Server();
+		$plugin->initialize($server);
 
-        $request = new Request('SEARCH', '/index.php/foo', [
-            'Content-Type' => 'text/xml'
-        ]);
-        $request->setBaseUrl('/index.php');
-        $request->setBody(fopen(__DIR__ . '/invalidwherenoprop.xml', 'r'));
-        $response = new Response();
+		$request = new Request('SEARCH', '/index.php/foo', [
+			'Content-Type' => 'text/xml',
+		]);
+		$request->setBaseUrl('/index.php');
+		$request->setBody(fopen(__DIR__ . '/invalidwherenoprop.xml', 'r'));
+		$response = new Response();
 
-        $this->searchBackend->expects($this->any())
-            ->method('isValidScope')
-            ->willReturn(true);
+		$this->searchBackend->expects($this->any())
+			->method('isValidScope')
+			->willReturn(true);
 
-        $this->searchBackend->expects($this->never())
-            ->method('search');
+		$this->searchBackend->expects($this->never())
+			->method('search');
 
 		$this->searchBackend->expects($this->any())
 			->method('getPropertyDefinitionsForScope')
 			->willReturn([
-				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
-				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
 			]);
 
-        $plugin->searchHandler($request, $response);
+		$plugin->searchHandler($request, $response);
 
-        $this->assertEquals(400, $response->getStatus());
-    }
+		$this->assertEquals(400, $response->getStatus());
+	}
 
 	public function testSearchQueryInfiniteLoopEmptyLiteral() {
 		$this->searchBackend->expects($this->any())
@@ -536,7 +543,7 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$plugin->initialize($server);
 
 		$request = new Request('SEARCH', '/index.php/foo', [
-			'Content-Type' => 'text/xml'
+			'Content-Type' => 'text/xml',
 		]);
 		$request->setBaseUrl('/index.php');
 		$request->setBody(fopen(__DIR__ . '/infiniteloopemptyliteral.xml', 'r'));
@@ -548,6 +555,15 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 
 		$this->searchBackend->expects($this->never())
 			->method('search');
+
+		$this->searchBackend->expects($this->any())
+			->method('getPropertyDefinitionsForScope')
+			->willReturn([
+				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+			]);
 
 		$plugin->searchHandler($request, $response);
 
