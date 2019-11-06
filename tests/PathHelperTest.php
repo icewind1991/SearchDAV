@@ -21,10 +21,11 @@
 
 namespace SearchDAV\Test;
 
+use PHPUnit\Framework\TestCase;
 use Sabre\DAV\Server;
 use SearchDAV\DAV\PathHelper;
 
-class PathHelperTest extends \PHPUnit_Framework_TestCase {
+class PathHelperTest extends TestCase {
 	public function uriProvider(){
 		return [
 			['/', '', ''],

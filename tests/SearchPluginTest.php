@@ -22,6 +22,7 @@
 namespace SearchDAV\Test;
 
 
+use PHPUnit\Framework\TestCase;
 use Sabre\DAV\FS\Directory;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
@@ -29,21 +30,17 @@ use Sabre\DAV\Server;
 use Sabre\DAV\Xml\Service;
 use Sabre\HTTP\Request;
 use Sabre\HTTP\Response;
-use Sabre\VObject\Parser\XML;
 use SearchDAV\Backend\ISearchBackend;
 use SearchDAV\Backend\SearchPropertyDefinition;
 use SearchDAV\Backend\SearchResult;
 use SearchDAV\DAV\SearchPlugin;
 use SearchDAV\Query\Query;
-use SearchDAV\XML\BasicSearch;
 use SearchDAV\XML\Limit;
 use SearchDAV\XML\Literal;
-use SearchDAV\XML\Operator;
-use SearchDAV\XML\Order;
 use SearchDAV\XML\Scope;
 use SearchDAV\XML\SupportedQueryGrammar;
 
-class SearchPluginTest extends \PHPUnit_Framework_TestCase {
+class SearchPluginTest extends TestCase {
 	/** @var ISearchBackend|\PHPUnit_Framework_MockObject_MockObject */
 	private $searchBackend;
 

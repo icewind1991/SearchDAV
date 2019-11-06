@@ -22,6 +22,7 @@
 namespace SearchDAV\Test;
 
 
+use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Service;
 use SearchDAV\DAV\QueryParser;
 use SearchDAV\XML\BasicSearch;
@@ -33,7 +34,7 @@ use SearchDAV\XML\Scope;
 use SearchDAV\XML\SupportedQueryGrammar;
 
 
-class QueryParserTest extends \PHPUnit_Framework_TestCase {
+class QueryParserTest extends TestCase {
 	public function testParseBasicQuery() {
 		$query = file_get_contents(__DIR__ . '/basicquery.xml');
 		$parser = new QueryParser();
