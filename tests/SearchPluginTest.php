@@ -491,6 +491,41 @@ class SearchPluginTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(400, $response->getStatus());
 	}
 
+    public function testSearchQueryInvalidWhereNoProp() {
+        $this->searchBackend->expects($this->any())
+            ->method('getArbiterPath')
+            ->willReturn('foo');
+
+        $plugin = new SearchPlugin($this->searchBackend);
+        $server = new Server();
+        $plugin->initialize($server);
+
+        $request = new Request('SEARCH', '/index.php/foo', [
+            'Content-Type' => 'text/xml'
+        ]);
+        $request->setBaseUrl('/index.php');
+        $request->setBody(fopen(__DIR__ . '/invalidwherenoprop.xml', 'r'));
+        $response = new Response();
+
+        $this->searchBackend->expects($this->any())
+            ->method('isValidScope')
+            ->willReturn(true);
+
+        $this->searchBackend->expects($this->never())
+            ->method('search');
+
+		$this->searchBackend->expects($this->any())
+			->method('getPropertyDefinitionsForScope')
+			->willReturn([
+				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+			]);
+
+        $plugin->searchHandler($request, $response);
+
+        $this->assertEquals(400, $response->getStatus());
+    }
+
 	public function testSearchQueryInfiniteLoopEmptyLiteral() {
 		$this->searchBackend->expects($this->any())
 			->method('getArbiterPath')
