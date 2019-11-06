@@ -177,4 +177,17 @@ class QueryParserTest extends TestCase {
 			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::ASC)
 		], $search->orderBy);
 	}
+
+	/**
+	 * @expectedException \Sabre\Xml\LibXMLException
+	 * @expectedExceptionMessage Opening and ending tag mismatch: prop line 17 and gt
+	 * on line 19, column 20
+	 *
+	 * @throws \Sabre\Xml\ParseException
+	 */
+	public function testParseWhereBroken()
+	{
+		$query = file_get_contents(__DIR__ . '/invalidwherebroken.xml');
+		(new QueryParser())->parse($query, null, $rootElementName);
+	}
 }
