@@ -17,7 +17,11 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"SearchDAV\\": "src/",
+			"SearchDAV\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
 			"SearchDAV\\Test\\": "tests/"
 		}
 	}
