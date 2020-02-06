@@ -21,8 +21,8 @@
 
 namespace SearchDAV\Test;
 
-
 use PHPUnit\Framework\TestCase;
+use Sabre\Xml\ParseException;
 use Sabre\Xml\Service;
 use SearchDAV\DAV\QueryParser;
 use SearchDAV\XML\BasicSearch;
@@ -49,14 +49,14 @@ class QueryParserTest extends TestCase {
 
 		$this->assertEquals(['{DAV:}getcontentlength'], $search->select);
 		$this->assertEquals([
-			new Scope('/container1/', 'infinity')
+			new Scope('/container1/', 'infinity'),
 		], $search->from);
 		$this->assertEquals(new Operator(\SearchDAV\Query\Operator::OPERATION_GREATER_THAN, [
 			'{DAV:}getcontentlength',
-			new Literal(10000)
+			new Literal(10000),
 		]), $search->where);
 		$this->assertEquals([
-			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::ASC)
+			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::ASC),
 		], $search->orderBy);
 	}
 
@@ -74,14 +74,14 @@ class QueryParserTest extends TestCase {
 
 		$this->assertEquals(['{DAV:}getcontentlength'], $search->select);
 		$this->assertEquals([
-			new Scope('/container1/', 'infinity')
+			new Scope('/container1/', 'infinity'),
 		], $search->from);
 		$this->assertEquals(new Operator(\SearchDAV\Query\Operator::OPERATION_GREATER_THAN, [
 			'{DAV:}getcontentlength',
-			new Literal(10000)
+			new Literal(10000),
 		]), $search->where);
 		$this->assertEquals([
-			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::DESC)
+			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::DESC),
 		], $search->orderBy);
 	}
 
@@ -106,12 +106,10 @@ class QueryParserTest extends TestCase {
 		$this->assertEquals([], $search->orderBy);
 	}
 
-	/**
-	 * @expectedException \Sabre\XML\ParseException
-	 */
 	public function testParseNoFrom() {
 		$query = file_get_contents(__DIR__ . '/nofrom.xml');
 		$parser = new QueryParser();
+		$this->expectException(ParseException::class);
 		$parser->parse($query, null, $rootElementName);
 	}
 
@@ -158,36 +156,29 @@ class QueryParserTest extends TestCase {
 
 		$this->assertEquals(['{DAV:}getcontentlength'], $search->select);
 		$this->assertEquals([
-			new Scope('/container1/', 'infinity')
+			new Scope('/container1/', 'infinity'),
 		], $search->from);
 		$this->assertEquals(new Operator(\SearchDAV\Query\Operator::OPERATION_AND, [
 			new Operator(\SearchDAV\Query\Operator::OPERATION_GREATER_THAN, [
 				'{DAV:}getcontentlength',
-				new Literal(10000)
+				new Literal(10000),
 			]),
 			new Operator(\SearchDAV\Query\Operator::OPERATION_LESS_THAN, [
 				'{DAV:}getcontentlength',
-				new Literal(90000)
+				new Literal(90000),
 			]),
 			new Operator(\SearchDAV\Query\Operator::OPERATION_CONTAINS, [
-				'Peter Forsberg'
+				'Peter Forsberg',
 			]),
 		]), $search->where);
 		$this->assertEquals([
-			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::ASC)
+			new Order('{DAV:}getcontentlength', \SearchDAV\Query\Order::ASC),
 		], $search->orderBy);
 	}
 
-	/**
-	 * @expectedException \Sabre\Xml\LibXMLException
-	 * @expectedExceptionMessage Opening and ending tag mismatch: prop line 17 and gt
-	 * on line 19, column 20
-	 *
-	 * @throws \Sabre\Xml\ParseException
-	 */
-	public function testParseWhereBroken()
-	{
+	public function testParseWhereBroken() {
 		$query = file_get_contents(__DIR__ . '/invalidwherebroken.xml');
+		$this->expectException(ParseException::class);
 		(new QueryParser())->parse($query, null, $rootElementName);
 	}
 }

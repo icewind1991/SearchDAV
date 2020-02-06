@@ -21,7 +21,6 @@
 
 namespace SearchDAV\Test;
 
-
 use Sabre\DAV\INode;
 use Sabre\DAV\SimpleFile;
 use SearchDAV\Backend\ISearchBackend;

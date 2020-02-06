@@ -21,7 +21,6 @@
 
 namespace SearchDAV\Test;
 
-
 use PHPUnit\Framework\TestCase;
 use Sabre\DAV\FS\Directory;
 use Sabre\DAV\INode;
@@ -44,7 +43,7 @@ class SearchPluginTest extends TestCase {
 	/** @var ISearchBackend|\PHPUnit_Framework_MockObject_MockObject */
 	private $searchBackend;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->searchBackend = $this->getMockBuilder(ISearchBackend::class)
