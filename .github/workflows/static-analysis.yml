@@ -2,7 +2,7 @@ name: Php Static analysis
 on: [push, pull_request]
 
 jobs:
-  static-psalm-analysis:
+  psalm:
       runs-on: ubuntu-20.04
       steps:
           - name: Checkout
@@ -18,3 +18,19 @@ jobs:
             run: composer i
           - name: Run coding standards check
             run: composer run psalm
+  phpstan:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Set up php
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.4
+          tools: composer:v1
+          coverage: none
+          extensions: redis
+      - name: Install dependencies
+        run: composer i
+      - name: Run coding standards check
+        run: composer run psalm
