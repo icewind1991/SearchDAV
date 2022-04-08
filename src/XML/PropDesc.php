@@ -46,7 +46,7 @@ class PropDesc implements XmlSerializable {
 	 */
 	public $sortable;
 
-	public function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer): void {
 		$data = [
 			'{DAV:}dataType' => [$this->dataType => null]
 		];

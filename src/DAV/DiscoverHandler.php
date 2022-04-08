@@ -54,7 +54,7 @@ class DiscoverHandler {
 		$this->queryParser = $queryParser;
 	}
 
-	public function handelDiscoverRequest($xml, RequestInterface $request, ResponseInterface $response) {
+	public function handelDiscoverRequest($xml, RequestInterface $request, ResponseInterface $response): bool {
 		if (!isset($xml['{DAV:}basicsearch'])) {
 			$response->setStatus(400);
 			$response->setBody('Unexpected xml content for query-schema-discovery, expected basicsearch');

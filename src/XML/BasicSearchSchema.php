@@ -37,7 +37,7 @@ class BasicSearchSchema implements XmlSerializable {
 		$this->properties = $properties;
 	}
 
-	public function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer): void {
 		$childs = array_map(function (PropDesc $propDesc) {
 			return [
 				'name'  => '{DAV:}propdesc',

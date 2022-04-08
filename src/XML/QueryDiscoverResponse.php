@@ -45,7 +45,7 @@ class QueryDiscoverResponse extends Response {
 		$this->schema = $schema;
 	}
 
-	public function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer): void {
 		if ($status = $this->getHTTPStatus()) {
 			$writer->writeElement('{DAV:}status', 'HTTP/1.1 ' . $status . ' ' . \Sabre\HTTP\Response::$statusCodes[$status]);
 		}

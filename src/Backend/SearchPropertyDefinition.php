@@ -54,7 +54,7 @@ class SearchPropertyDefinition {
 	 * @param string $dataType the datatype of the property, one of the SearchProperty::DATATYPE_ constants or any XSD datatype in clark notation
 	 * @param bool $caseSensitive whether or not comparisons on the property are case sensitive, only applies to string propertries
 	 */
-	public function __construct($name, $searchable, $selectable, $sortable, $dataType = self::DATATYPE_STRING, $caseSensitive = true) {
+	public function __construct(string $name, bool $selectable, bool $searchable, bool $sortable, string $dataType = self::DATATYPE_STRING, bool $caseSensitive = true) {
 		$this->searchable = $searchable;
 		$this->selectable = $selectable;
 		$this->sortable = $sortable;

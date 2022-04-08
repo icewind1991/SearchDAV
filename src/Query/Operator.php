@@ -59,7 +59,7 @@ class Operator {
 	 * Operator constructor.
 	 *
 	 * @param string $type
-	 * @param array $arguments
+	 * @param (Literal|\SearchDAV\Backend\SearchPropertyDefinition|Operator)[] $arguments
 	 */
 	public function __construct(string $type = '', array $arguments = []) {
 		$this->type = $type;

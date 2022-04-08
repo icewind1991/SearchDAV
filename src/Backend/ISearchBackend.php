@@ -38,7 +38,7 @@ interface ISearchBackend {
 	 *
 	 * @return string
 	 */
-	public function getArbiterPath();
+	public function getArbiterPath(): string;
 
 	/**
 	 * Whether or not the search backend supports search requests on this scope
@@ -55,7 +55,7 @@ interface ISearchBackend {
 	 * @param string|null $path the path of the search scope relative to the dav server, or null if the scope is outside the dav server
 	 * @return bool
 	 */
-	public function isValidScope($href, $depth, $path);
+	public function isValidScope(string $href, $depth, ?string $path): bool;
 
 	/**
 	 * List the available properties that can be used in search
@@ -69,7 +69,7 @@ interface ISearchBackend {
 	 * @param string|null $path the path of the search scope relative to the dav server, or null if the scope is outside the dav server
 	 * @return SearchPropertyDefinition[]
 	 */
-	public function getPropertyDefinitionsForScope($href, $path);
+	public function getPropertyDefinitionsForScope(string $href, ?string $path): array;
 
 	/**
 	 * Preform the search request
@@ -81,7 +81,7 @@ interface ISearchBackend {
 	 * @param Query $query
 	 * @return SearchResult[]
 	 */
-	public function search(Query $query);
+	public function search(Query $query): array;
 
 	/**
 	 * Called by the search plugin once the nodes to be returned have been found.

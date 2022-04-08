@@ -30,15 +30,15 @@ use SearchDAV\XML\BasicSearch;
 use SearchDAV\Backend\SearchPropertyDefinition;
 
 class DummyBackend implements ISearchBackend {
-	public function getArbiterPath() {
+	public function getArbiterPath(): string {
 		return '';
 	}
 
-	public function isValidScope($href, $depth, $path) {
+	public function isValidScope(string $href, $depth, ?string $path): bool {
 		return true;
 	}
 
-	public function getPropertyDefinitionsForScope($href, $path) {
+	public function getPropertyDefinitionsForScope($href, $path): array {
 		return [
 			new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
 			new SearchPropertyDefinition('{DAV:}getcontenttype', true, true, true),
@@ -47,7 +47,7 @@ class DummyBackend implements ISearchBackend {
 		];
 	}
 
-	public function search(Query $query) {
+	public function search(Query $query): array {
 		return [
 			new SearchResult(new SimpleFile('foo.txt', 'foobar', 'text/plain'), '/bar/foo.txt')
 		];

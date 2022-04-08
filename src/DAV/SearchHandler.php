@@ -55,7 +55,7 @@ class SearchHandler {
 		$this->server = $server;
 	}
 
-	public function handleSearchRequest($xml, ResponseInterface $response) {
+	public function handleSearchRequest($xml, ResponseInterface $response): bool {
 		if (!isset($xml['{DAV:}basicsearch'])) {
 			$response->setStatus(400);
 			$response->setBody('Unexpected xml content for searchrequest, expected basicsearch');
@@ -129,7 +129,7 @@ class SearchHandler {
 
 	/**
 	 * @param \SearchDAV\XML\Operator $operator
-	 * @param array $allProps
+	 * @param SearchPropertyDefinition[] $allProps
 	 * @return Operator
 	 * @throws BadRequest
 	 */
@@ -166,11 +166,11 @@ class SearchHandler {
 	 * If a depth of 1 is requested child elements will also be returned.
 	 *
 	 * @param SearchResult[] $results
-	 * @param array $propertyNames
+	 * @param string[] $propertyNames
 	 * @param int $depth
-	 * @return \Iterator
+	 * @return \Iterator<array>
 	 */
-	private function getPropertiesIteratorResults($results, $propertyNames = [], $depth = 0): \Iterator {
+	private function getPropertiesIteratorResults(array $results, array $propertyNames = [], int $depth = 0): \Iterator {
 		$propFindType = $propertyNames ? PropFind::NORMAL : PropFind::ALLPROPS;
 
 		$this->searchBackend->preloadPropertyFor(array_map(function (SearchResult $result): INode {
@@ -179,7 +179,7 @@ class SearchHandler {
 
 		foreach ($results as $result) {
 			$node = $result->node;
-			$propFind = new PropFind($result->href, (array)$propertyNames, $depth, $propFindType);
+			$propFind = new PropFind($result->href, $propertyNames, $depth, $propFindType);
 			$r = $this->server->getPropertiesByNode($propFind, $node);
 			if ($r) {
 				$result = $propFind->getResultForMultiStatus();
