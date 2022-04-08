@@ -56,7 +56,7 @@ class Operator implements XmlDeserializable {
 		$this->arguments = $arguments;
 	}
 
-	static function xmlDeserialize(Reader $reader): Operator {
+	public static function xmlDeserialize(Reader $reader): Operator {
 		$operator = new self();
 
 		$operator->type = $reader->getClark() ?? '';

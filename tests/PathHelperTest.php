@@ -26,7 +26,7 @@ use Sabre\DAV\Server;
 use SearchDAV\DAV\PathHelper;
 
 class PathHelperTest extends TestCase {
-	public function uriProvider(){
+	public function uriProvider() {
 		return [
 			['/', '', ''],
 			['/index.php/', 'foo', 'foo'],

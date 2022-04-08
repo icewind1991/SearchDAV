@@ -21,7 +21,6 @@
 
 namespace SearchDAV\XML;
 
-
 use Sabre\DAV\Xml\Element\Response;
 use Sabre\Xml\Writer;
 
@@ -38,16 +37,15 @@ class QueryDiscoverResponse extends Response {
 	 * @param BasicSearchSchema|null $schema
 	 * @param null|int|string $httpStatus
 	 */
-	function __construct($href, BasicSearchSchema $schema = null, $httpStatus = null) {
+	public function __construct($href, BasicSearchSchema $schema = null, $httpStatus = null) {
 		if ($httpStatus !== null) {
 			$httpStatus = (string)$httpStatus;
 		}
 		parent::__construct($href, [], $httpStatus);
 		$this->schema = $schema;
-
 	}
 
-	function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer) {
 		if ($status = $this->getHTTPStatus()) {
 			$writer->writeElement('{DAV:}status', 'HTTP/1.1 ' . $status . ' ' . \Sabre\HTTP\Response::$statusCodes[$status]);
 		}
@@ -55,7 +53,7 @@ class QueryDiscoverResponse extends Response {
 
 		if ($this->schema) {
 			$writer->writeElement('{DAV:}query-schema', [
- 				'{DAV:}basicsearchschema' => $this->schema
+				'{DAV:}basicsearchschema' => $this->schema
 			]);
 		}
 	}

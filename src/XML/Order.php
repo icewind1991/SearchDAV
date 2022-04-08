@@ -21,7 +21,6 @@
 
 namespace SearchDAV\XML;
 
-
 use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
 
@@ -50,7 +49,7 @@ class Order implements XmlDeserializable {
 		$this->order = $order;
 	}
 
-	static function xmlDeserialize(Reader $reader): Order {
+	public static function xmlDeserialize(Reader $reader): Order {
 		$order = new self();
 
 		$childs = \Sabre\Xml\Deserializer\keyValue($reader);

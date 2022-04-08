@@ -21,7 +21,6 @@
 
 namespace SearchDAV\Backend;
 
-
 use Sabre\DAV\INode;
 
 class SearchResult {

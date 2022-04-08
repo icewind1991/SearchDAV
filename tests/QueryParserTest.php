@@ -33,7 +33,6 @@ use SearchDAV\XML\Order;
 use SearchDAV\XML\Scope;
 use SearchDAV\XML\SupportedQueryGrammar;
 
-
 class QueryParserTest extends TestCase {
 	public function testParseBasicQuery() {
 		$query = file_get_contents(__DIR__ . '/basicquery.xml');

@@ -180,12 +180,22 @@ class SearchPluginTest extends TestCase {
 		$this->searchBackend->expects($this->once())
 			->method('getPropertyDefinitionsForScope')
 			->willReturn([
-				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition(
+					'{DAV:}getcontentlength',
+					true,
+					true,
+					true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+				),
 				new SearchPropertyDefinition('{DAV:}getcontenttype', true, true, true),
 				new SearchPropertyDefinition('{DAV:}displayname', true, true, true),
-				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition(
+					'{http://ns.nextcloud.com:}fileid',
+					false,
+					true,
+					true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+				),
 			]);
 
 		$plugin->searchHandler($request, $response);
@@ -274,8 +284,13 @@ class SearchPluginTest extends TestCase {
 			->method('isValidScope')
 			->willReturn(true);
 
-		$lengthProp = new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
-			SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER);
+		$lengthProp = new SearchPropertyDefinition(
+			'{DAV:}getcontentlength',
+			true,
+			true,
+			true,
+			SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+		);
 		$orderBy = [
 			new \SearchDAV\Query\Order($lengthProp, \SearchDAV\Query\Order::ASC),
 		];
@@ -347,8 +362,13 @@ class SearchPluginTest extends TestCase {
 			->method('getArbiterPath')
 			->willReturn('foo');
 
-		$lengthProp = new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
-			SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER);
+		$lengthProp = new SearchPropertyDefinition(
+			'{DAV:}getcontentlength',
+			true,
+			true,
+			true,
+			SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+		);
 		$plugin = new SearchPlugin($this->searchBackend);
 		$server = new Server();
 		$plugin->initialize($server);
@@ -483,8 +503,13 @@ class SearchPluginTest extends TestCase {
 		$this->searchBackend->expects($this->once())
 			->method('getPropertyDefinitionsForScope')
 			->willReturn([
-				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition(
+					'{http://ns.nextcloud.com:}fileid',
+					false,
+					true,
+					true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+				),
 			]);
 
 		$plugin->searchHandler($request, $response);
@@ -518,10 +543,20 @@ class SearchPluginTest extends TestCase {
 		$this->searchBackend->expects($this->any())
 			->method('getPropertyDefinitionsForScope')
 			->willReturn([
-				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
-				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition(
+					'{http://ns.nextcloud.com:}fileid',
+					false,
+					true,
+					true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+				),
+				new SearchPropertyDefinition(
+					'{DAV:}getcontentlength',
+					true,
+					true,
+					true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+				),
 			]);
 
 		$plugin->searchHandler($request, $response);
@@ -555,15 +590,24 @@ class SearchPluginTest extends TestCase {
 		$this->searchBackend->expects($this->any())
 			->method('getPropertyDefinitionsForScope')
 			->willReturn([
-				new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
-				new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+				new SearchPropertyDefinition(
+					'{http://ns.nextcloud.com:}fileid',
+					false,
+					true,
+					true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+				),
+				new SearchPropertyDefinition(
+					'{DAV:}getcontentlength',
+					true,
+					true,
+					true,
+					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+				),
 			]);
 
 		$plugin->searchHandler($request, $response);
 
 		$this->assertEquals(400, $response->getStatus());
 	}
-
 }

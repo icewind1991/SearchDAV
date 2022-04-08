@@ -29,7 +29,7 @@ use SearchDAV\DAV\SearchPlugin;
  * The limit and offset of a search query
  */
 class Limit extends \SearchDAV\Query\Limit implements XmlDeserializable {
-	static function xmlDeserialize(Reader $reader): Limit {
+	public static function xmlDeserialize(Reader $reader): Limit {
 		$limit = new self();
 
 		$elements = \Sabre\Xml\Deserializer\keyValue($reader);

@@ -70,7 +70,7 @@ class BasicSearch implements XmlDeserializable {
 	 * @return BasicSearch
 	 * @throws ParseException
 	 */
-	static function xmlDeserialize(Reader $reader): BasicSearch {
+	public static function xmlDeserialize(Reader $reader): BasicSearch {
 		$search = new self();
 
 		$elements = \Sabre\Xml\Deserializer\keyValue($reader);

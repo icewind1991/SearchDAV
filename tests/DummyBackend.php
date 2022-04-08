@@ -54,6 +54,5 @@ class DummyBackend implements ISearchBackend {
 	}
 
 	public function preloadPropertyFor(array $nodes, array $requestProperties): void {
-
 	}
 }

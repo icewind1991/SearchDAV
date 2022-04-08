@@ -85,8 +85,10 @@ class SearchHandler {
 			$response->setBody($e->getMessage());
 			return false;
 		}
-		$data = $this->server->generateMultiStatus(iterator_to_array($this->getPropertiesIteratorResults($results,
-			$query->select)), false);
+		$data = $this->server->generateMultiStatus(iterator_to_array($this->getPropertiesIteratorResults(
+			$results,
+			$query->select
+		)), false);
 		$response->setBody($data);
 		return false;
 	}
