@@ -21,6 +21,7 @@
 
 namespace SearchDAV\Backend;
 
+use Sabre\DAV\INode;
 use SearchDAV\Query\Query;
 
 interface ISearchBackend {
@@ -81,4 +82,10 @@ interface ISearchBackend {
 	 * @return SearchResult[]
 	 */
 	public function search(Query $query);
+
+	/**
+	 * @param INode[] $nodes
+	 * @param string[] $requestProperties
+	 */
+	public function preloadPropertyFor(array $nodes, array $requestProperties): void;
 }
