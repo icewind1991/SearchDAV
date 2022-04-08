@@ -22,6 +22,7 @@
 namespace SearchDAV\DAV;
 
 use Sabre\DAV\Exception\BadRequest;
+use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\Server;
 use Sabre\HTTP\ResponseInterface;
@@ -169,6 +170,10 @@ class SearchHandler {
 	 */
 	private function getPropertiesIteratorResults($results, $propertyNames = [], $depth = 0): \Iterator {
 		$propFindType = $propertyNames ? PropFind::NORMAL : PropFind::ALLPROPS;
+
+		$this->searchBackend->preloadPropertyFor(array_map(function (SearchResult $result): INode {
+			return $result->node;
+		}, $results), $propertyNames);
 
 		foreach ($results as $result) {
 			$node = $result->node;
