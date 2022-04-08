@@ -38,7 +38,7 @@ class Query {
 	 */
 	public $from;
 	/**
-	 * @var Operator
+	 * @var ?Operator
 	 *
 	 * The search operator, either a comparison ('gt', 'eq', ...) or a boolean operator ('and', 'or', 'not')
 	 */

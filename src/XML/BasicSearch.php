@@ -42,7 +42,7 @@ class BasicSearch implements XmlDeserializable {
 	 */
 	public $from;
 	/**
-	 * @var Operator
+	 * @var ?Operator
 	 *
 	 * The search operator, either a comparison ('gt', 'eq', ...) or a boolean operator ('and', 'or', 'not')
 	 */
@@ -79,11 +79,11 @@ class BasicSearch implements XmlDeserializable {
 			throw new ParseException('Missing {DAV:}from when parsing {DAV:}basicsearch');
 		}
 
-		$search->select = isset($elements['{DAV:}select']) ? $elements['{DAV:}select'] : [];
+		$search->select = $elements['{DAV:}select'] ?? [];
 		$search->from = $elements['{DAV:}from'];
-		$search->where = isset($elements['{DAV:}where']) ? $elements['{DAV:}where'] : null;
-		$search->orderBy = isset($elements['{DAV:}orderby']) ? $elements['{DAV:}orderby'] : [];
-		$search->limit = isset($elements['{DAV:}limit']) ? $elements['{DAV:}limit'] : new Limit();
+		$search->where = $elements['{DAV:}where'] ?? null;
+		$search->orderBy = $elements['{DAV:}orderby'] ?? [];
+		$search->limit = $elements['{DAV:}limit'] ?? new Limit();
 
 		return $search;
 	}

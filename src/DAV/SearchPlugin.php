@@ -76,11 +76,11 @@ class SearchPlugin extends ServerPlugin {
 	/**
 	 * SEARCH is allowed for users files
 	 *
-	 * @param string $uri
+	 * @param string $path
 	 * @return array
 	 */
-	public function getHTTPMethods($uri) {
-		$path = $this->pathHelper->getPathFromUri($uri);
+	public function getHTTPMethods($path) {
+		$path = $this->pathHelper->getPathFromUri($path);
 		if ($this->searchBackend->getArbiterPath() === $path) {
 			return ['SEARCH'];
 		} else {
@@ -95,9 +95,9 @@ class SearchPlugin extends ServerPlugin {
 	}
 
 	public function searchHandler(RequestInterface $request, ResponseInterface $response) {
-		$contentType = $request->getHeader('Content-Type');
+		$contentType = $request->getHeader('Content-Type') ?? '';
 
-		// Currently we only support xml search queries
+		// Currently, we only support xml search queries
 		if ((strpos($contentType, 'text/xml') === false) && (strpos($contentType, 'application/xml') === false)) {
 			return true;
 		}
