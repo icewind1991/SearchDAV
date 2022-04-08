@@ -9,10 +9,14 @@
 		}
 	],
 	"require": {
-		"php": ">=7.1",
+		"php": ">=7.3 || >=8.0",
 		"sabre/dav": "^4.0.0"
 	},
 	"require-dev": {
+		"php-parallel-lint/php-parallel-lint": "^1.0",
+		"friendsofphp/php-cs-fixer": "^2",
+		"phpstan/phpstan": "^0.12",
+		"psalm/phar": "^4.3",
 		"phpunit/phpunit": "^8"
 	},
 	"autoload": {
@@ -24,5 +28,11 @@
 		"psr-4": {
 			"SearchDAV\\Test\\": "tests/"
 		}
+	},
+	"scripts": {
+		"lint": "parallel-lint --exclude src --exclude vendor --exclude target --exclude build .",
+		"cs:check": "php-cs-fixer fix --dry-run --diff",
+		"cs:fix": "php-cs-fixer fix",
+		"psalm": "psalm.phar"
 	}
 }
