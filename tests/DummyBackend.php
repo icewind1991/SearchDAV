@@ -52,4 +52,8 @@ class DummyBackend implements ISearchBackend {
 			new SearchResult(new SimpleFile('foo.txt', 'foobar', 'text/plain'), '/bar/foo.txt')
 		];
 	}
+
+	public function preloadPropertyFor(array $nodes, array $requestProperties): void {
+
+	}
 }
