@@ -84,6 +84,9 @@ interface ISearchBackend {
 	public function search(Query $query);
 
 	/**
+	 * Called by the search plugin once the nodes to be returned have been found.
+	 * This can be used to more efficiently load the requested properties for the results.
+	 *
 	 * @param INode[] $nodes
 	 * @param string[] $requestProperties
 	 */
