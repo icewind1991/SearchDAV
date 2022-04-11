@@ -185,7 +185,7 @@ class SearchPluginTest extends TestCase {
 					true,
 					true,
 					true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+					SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 				),
 				new SearchPropertyDefinition('{DAV:}getcontenttype', true, true, true),
 				new SearchPropertyDefinition('{DAV:}displayname', true, true, true),
@@ -194,7 +194,7 @@ class SearchPluginTest extends TestCase {
 					false,
 					true,
 					true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+					SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 				),
 			]);
 
@@ -289,7 +289,7 @@ class SearchPluginTest extends TestCase {
 			true,
 			true,
 			true,
-			SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+			SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 		);
 		$orderBy = [
 			new \SearchDAV\Query\Order($lengthProp, \SearchDAV\Query\Order::ASC),
@@ -367,7 +367,7 @@ class SearchPluginTest extends TestCase {
 			true,
 			true,
 			true,
-			SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+			SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 		);
 		$plugin = new SearchPlugin($this->searchBackend);
 		$server = new Server();
@@ -508,7 +508,7 @@ class SearchPluginTest extends TestCase {
 					false,
 					true,
 					true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+					SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 				),
 			]);
 
@@ -548,14 +548,14 @@ class SearchPluginTest extends TestCase {
 					false,
 					true,
 					true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+					SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 				),
 				new SearchPropertyDefinition(
 					'{DAV:}getcontentlength',
 					true,
 					true,
 					true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+					SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 				),
 			]);
 
@@ -595,14 +595,14 @@ class SearchPluginTest extends TestCase {
 					false,
 					true,
 					true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+					SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 				),
 				new SearchPropertyDefinition(
 					'{DAV:}getcontentlength',
 					true,
 					true,
 					true,
-					SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER
+					SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER
 				),
 			]);
 

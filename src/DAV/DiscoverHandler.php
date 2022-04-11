@@ -97,12 +97,7 @@ class DiscoverHandler {
 		foreach ($propertyDefinitions as $propertyDefinition) {
 			$key = $this->hashDefinition($propertyDefinition);
 			if (!isset($groups[$key])) {
-				$desc = new PropDesc();
-				$desc->dataType = $propertyDefinition->dataType;
-				$desc->sortable = $propertyDefinition->sortable;
-				$desc->selectable = $propertyDefinition->selectable;
-				$desc->searchable = $propertyDefinition->searchable;
-				$groups[$key] = $desc;
+				$groups[$key] = new PropDesc($propertyDefinition);
 			}
 			$groups[$key]->properties[] = $propertyDefinition->name;
 		}

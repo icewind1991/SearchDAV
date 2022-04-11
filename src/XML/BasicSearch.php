@@ -24,6 +24,7 @@ namespace SearchDAV\XML;
 use Sabre\Xml\ParseException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\XmlDeserializable;
+use function Sabre\Xml\Deserializer\keyValue;
 
 /**
  * The object representation of a search query made by the client
@@ -65,26 +66,33 @@ class BasicSearch implements XmlDeserializable {
 	 */
 	public $limit;
 
+	public function __construct(array $select, array $from, ?Operator $where, array $orderBy, Limit $limit) {
+		$this->select = $select;
+		$this->from = $from;
+		$this->where = $where;
+		$this->orderBy = $orderBy;
+		$this->limit = $limit;
+	}
+
+
 	/**
 	 * @param Reader $reader
 	 * @return BasicSearch
 	 * @throws ParseException
 	 */
 	public static function xmlDeserialize(Reader $reader): BasicSearch {
-		$search = new self();
-
-		$elements = \Sabre\Xml\Deserializer\keyValue($reader);
+		$elements = keyValue($reader);
 
 		if (!isset($elements['{DAV:}from'])) {
 			throw new ParseException('Missing {DAV:}from when parsing {DAV:}basicsearch');
 		}
 
-		$search->select = $elements['{DAV:}select'] ?? [];
-		$search->from = $elements['{DAV:}from'];
-		$search->where = $elements['{DAV:}where'] ?? null;
-		$search->orderBy = $elements['{DAV:}orderby'] ?? [];
-		$search->limit = $elements['{DAV:}limit'] ?? new Limit();
-
-		return $search;
+		return new BasicSearch(
+			$elements['{DAV:}select'] ?? [],
+			$elements['{DAV:}from'],
+			$elements['{DAV:}where'] ?? null,
+			$elements['{DAV:}orderby'] ?? [],
+			$elements['{DAV:}limit'] ?? new Limit()
+		);
 	}
 }

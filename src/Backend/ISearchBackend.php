@@ -28,7 +28,7 @@ interface ISearchBackend {
 	/**
 	 * Get the path of the search arbiter of this backend
 	 *
-	 * The search arbiter is the URI that the client will send it's SEARCH requests to
+	 * The search arbiter is the URI that the client will send its SEARCH requests to
 	 * Note that this is not required to be the same as the search scopes which determine what to search in
 	 *
 	 * The returned value should be a path relative the root of the dav server.
@@ -41,7 +41,7 @@ interface ISearchBackend {
 	public function getArbiterPath(): string;
 
 	/**
-	 * Whether or not the search backend supports search requests on this scope
+	 * Whether the search backend supports search requests on this scope
 	 *
 	 * The scope defines the resource that it being searched, such as a folder or address book.
 	 *

@@ -58,7 +58,7 @@ class SearchHandler {
 	public function handleSearchRequest($xml, ResponseInterface $response): bool {
 		if (!isset($xml['{DAV:}basicsearch'])) {
 			$response->setStatus(400);
-			$response->setBody('Unexpected xml content for searchrequest, expected basicsearch');
+			$response->setBody('Unexpected xml content for search request, expected basicsearch');
 			return false;
 		}
 		/** @var BasicSearch $query */

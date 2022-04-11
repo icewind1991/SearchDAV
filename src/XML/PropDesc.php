@@ -23,6 +23,7 @@ namespace SearchDAV\XML;
 
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlSerializable;
+use SearchDAV\Backend\SearchPropertyDefinition;
 
 class PropDesc implements XmlSerializable {
 	/**
@@ -45,6 +46,13 @@ class PropDesc implements XmlSerializable {
 	 * @var boolean
 	 */
 	public $sortable;
+
+	public function __construct(SearchPropertyDefinition $propertyDefinition) {
+		$this->dataType = $propertyDefinition->dataType;
+		$this->sortable = $propertyDefinition->sortable;
+		$this->selectable = $propertyDefinition->selectable;
+		$this->searchable = $propertyDefinition->searchable;
+	}
 
 	public function xmlSerialize(Writer $writer): void {
 		$data = [

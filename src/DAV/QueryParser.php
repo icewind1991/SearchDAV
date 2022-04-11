@@ -30,6 +30,8 @@ use SearchDAV\XML\Literal;
 use SearchDAV\XML\Operator;
 use SearchDAV\XML\Order;
 use SearchDAV\XML\Scope;
+use function Sabre\Xml\Deserializer\keyValue;
+use function Sabre\Xml\Deserializer\repeatingElements;
 
 class QueryParser extends Service {
 	public $namespaceMap = [
@@ -46,13 +48,13 @@ class QueryParser extends Service {
 			'{DAV:}query-schema-discovery' => Element\KeyValue::class,
 			'{DAV:}basicsearch'            => BasicSearch::class,
 			'{DAV:}select'                 => function (Reader $reader) {
-				return \Sabre\Xml\Deserializer\keyValue($reader, '{DAV:}scope')['{DAV:}prop'];
+				return keyValue($reader, '{DAV:}scope')['{DAV:}prop'];
 			},
 			'{DAV:}from' => function (Reader $reader) {
-				return \Sabre\Xml\Deserializer\repeatingElements($reader, '{DAV:}scope');
+				return repeatingElements($reader, '{DAV:}scope');
 			},
 			'{DAV:}orderby' => function (Reader $reader) {
-				return \Sabre\Xml\Deserializer\repeatingElements($reader, '{DAV:}order');
+				return repeatingElements($reader, '{DAV:}order');
 			},
 			'{DAV:}scope' => Scope::class,
 			'{DAV:}where' => function (Reader $reader) {

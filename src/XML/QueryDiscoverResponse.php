@@ -23,6 +23,7 @@ namespace SearchDAV\XML;
 
 use Sabre\DAV\Xml\Element\Response;
 use Sabre\Xml\Writer;
+use function Sabre\HTTP\encodePath;
 
 class QueryDiscoverResponse extends Response {
 	/**
@@ -49,7 +50,7 @@ class QueryDiscoverResponse extends Response {
 		if ($status = $this->getHTTPStatus()) {
 			$writer->writeElement('{DAV:}status', 'HTTP/1.1 ' . $status . ' ' . \Sabre\HTTP\Response::$statusCodes[$status]);
 		}
-		$writer->writeElement('{DAV:}href', \Sabre\HTTP\encodePath($this->getHref()));
+		$writer->writeElement('{DAV:}href', encodePath($this->getHref()));
 
 		if ($this->schema) {
 			$writer->writeElement('{DAV:}query-schema', [

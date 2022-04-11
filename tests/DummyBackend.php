@@ -40,10 +40,10 @@ class DummyBackend implements ISearchBackend {
 
 	public function getPropertyDefinitionsForScope($href, $path): array {
 		return [
-			new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+			new SearchPropertyDefinition('{DAV:}getcontentlength', true, true, true, SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER),
 			new SearchPropertyDefinition('{DAV:}getcontenttype', true, true, true),
 			new SearchPropertyDefinition('{DAV:}displayname', true, true, true),
-			new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true, SearchPropertyDefinition::DATATYPE_NONNEGATIVE_INTEGER),
+			new SearchPropertyDefinition('{http://ns.nextcloud.com:}fileid', false, true, true, SearchPropertyDefinition::DATATYPE_NON_NEGATIVE_INTEGER),
 		];
 	}
 
