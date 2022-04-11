@@ -25,6 +25,7 @@ class SearchPropertyDefinition {
 	const XS = '{http://www.w3.org/2001/XMLSchema}';
 	const DATATYPE_STRING = self::XS . 'string';
 	const DATATYPE_INTEGER = self::XS . 'integer';
+	const DATATYPE_NONNEGATIVE_INTEGER = self::XS . 'nonNegativeInteger';
 	const DATATYPE_NON_NEGATIVE_INTEGER = self::XS . 'nonNegativeInteger';
 	const DATATYPE_DECIMAL = self::XS . 'decimal';
 	const DATATYPE_DATETIME = self::XS . 'dateTime';
