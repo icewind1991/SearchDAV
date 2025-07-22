@@ -1,3 +1,5 @@
+# Moved to https://codeberg.org/icewind/SearchDAV
+
 # SearchDAV
 
 [![Build Status](https://travis-ci.org/icewind1991/SearchDAV.svg?branch=master)](https://travis-ci.org/icewind1991/SearchDAV)
